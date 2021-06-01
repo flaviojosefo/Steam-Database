@@ -2,7 +2,7 @@ const passport = require('passport');
 
 module.exports = app => {
     
-    app.get('/', function (req, res) {
+    app.get('/', (req, res) => {
         let date = new Intl.DateTimeFormat('en-GB', {
             dateStyle: 'full',
             timeStyle: 'long'
@@ -12,6 +12,10 @@ module.exports = app => {
             message_tag: 'Access your Google Account',
         });
     });
+
+    app.get('/home'),  (req, res) => {
+        res.redirect('/');
+    }
 
     app.get('/success', (req, res) => {
         console.log("User Authenticated:", req.isAuthenticated());
@@ -43,7 +47,7 @@ module.exports = app => {
         passport.authenticate('google', {
             scope: ['profile', 'email'],
             accessType: 'offline', // Requests a refresh token
-            approvalPrompt: 'force'
+            prompt: 'consent'
         })
     );
 
