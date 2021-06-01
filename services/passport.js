@@ -34,10 +34,11 @@ passport.use(
             callbackURL: process.env.REDIRECT_URL
         },
         // Verify callback
-        (accessToken, refreshToken, profile, done) => {
+        (accessToken, refreshToken, params, profile, done) => {
             console.log('Access Token:', accessToken);
             console.log('Refresh Token:', refreshToken);
             console.log('User profile:', profile._json);
+            console.log('OAuth2 params:', params);
             return done(null, profile);
         }
 ));
