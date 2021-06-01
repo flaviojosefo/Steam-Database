@@ -11,14 +11,33 @@ dotenv.config();
  * See: https://stackoverflow.com/questions/27637609/understanding-passport-serialize-deserialize
  * Here, since no database is used, the full user profile has to be stored in the session.
  */ 
+passport.serializeUser((user, done) => {
+    done(null, user);
+});
 
 /*
 * On each new access, retrieve the user profile from the session and provide it as req.user
 * so that routes detect if there is a valid user context. 
 */
-
+passport.deserializeUser((user, done) => {
+    done(null, user);
+});
 
 /*  Google AUTH  */
 
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-
+passport.use(
+    new GoogleStrategy(
+        // Strategy Parameters
+        {
+            clientID: process.env.CLIENT_ID,
+            clientSecret: process.env.CLIENT_SECRET,
+            callbackURL: process.env.REDIRECT_URL
+        },
+        // Verify callback
+        (accessToken, refreshToken, profile, done) => {
+            console.log('Access Token:', accessToken);
+            console.log('Refresh Token:', refreshToken);
+            console.log('User profile:', profile._json);
+            return done(null, profile);
+        }
+));

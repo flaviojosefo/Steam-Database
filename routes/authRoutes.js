@@ -14,14 +14,16 @@ module.exports = app => {
     });
 
     app.get('/success', (req, res) => {
-        res.render('error', {
-            message_tag: 'Not implemented yet'
+        console.log("User Authenticated:", req.isAuthenticated());
+        res.render('success', {
+            message: 'Authorization successful!',
+            user: req.user
         });
     });
 
     app.get('/protected', (req, res, next) => {
-        res.render('error', {
-            message_tag: 'Not implemented yet'
+        res.render('protected', {
+            authenticated: req.isAuthenticated()
         });
     });
 
@@ -32,23 +34,18 @@ module.exports = app => {
     });
 
     app.get('/logout', (req, res) => {
-        res.render('error', {
-            message_tag: 'Not implemented yet'
-        });
+        req.logout();
+        res.redirect('/protected');
+        console.log("User Authenticated:", req.isAuthenticated());
     });
 
-    // app.get('/login',
-    //     passport.authenticate('google', {
-    //         scope: ['profile', 'email'],
-    //         accessType: 'offline' // Requests a refresh token
-    //     })
-    // );
-
-    app.get('/login', (req, res) => {
-        res.render('error', {
-            message_tag: 'Not implemented yet'
-        });
-    });
+    app.get('/login',
+        passport.authenticate('google', {
+            scope: ['profile', 'email'],
+            accessType: 'offline', // Requests a refresh token
+            approvalPrompt: 'force'
+        })
+    );
 
     app.get('/auth/google/callback',
         passport.authenticate('google', {
