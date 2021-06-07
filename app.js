@@ -16,12 +16,11 @@ app.use(session({
   saveUninitialized: true,
   cookie: {
     maxAge: 1000 * 60 * 60 * 1
-}  
+  }
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 require('./routes/authRoutes')(app);
 
 const https_server = https.createServer(certs, app).listen(port, () => {
