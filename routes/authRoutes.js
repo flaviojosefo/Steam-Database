@@ -63,7 +63,7 @@ module.exports = app => {
         passport.authenticate('google', {
             failureRedirect: '/error'
         }),
-        function (req, res) {
+        (req, res) => {
             // Successful authentication, redirect to saved route or success.
             const returnTo = req.session.returnTo;
             delete req.session.returnTo;
