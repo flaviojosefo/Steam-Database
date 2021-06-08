@@ -1,4 +1,5 @@
 const passport = require('passport');
+const isAuth = require('../services/middleware');
 
 module.exports = app => {
     
@@ -19,27 +20,34 @@ module.exports = app => {
 
     app.get('/success', (req, res) => {
         console.log("User Authenticated:", req.isAuthenticated());
+        console.log('Session expires in:', req.session.cookie.maxAge / 1000);
         res.render('success', {
-            message: 'Authorization successful!',
+            message: 'Authorization Successful!',
             user: req.user
         });
     });
 
-    app.get('/protected', (req, res, next) => {
-        res.render('protected', {
+    app.get('/resource', isAuth(), (req, res, next) => {
+        res.render('resource', {
             authenticated: req.isAuthenticated()
+        });
+    });
+
+    app.get('/status', (req, res, next) => {
+        res.render('status', {
+            status: req
         });
     });
 
     app.get('/error', (req, res) => {
         res.render('error', {
-            message_tag: 'Authentication error'
+            message_tag: 'Authentication Error'
         });
     });
 
     app.get('/logout', (req, res) => {
         req.logout();
-        res.redirect('/protected');
+        res.redirect('/status');
         console.log("User Authenticated:", req.isAuthenticated());
     });
 
@@ -56,7 +64,9 @@ module.exports = app => {
             failureRedirect: '/error'
         }),
         function (req, res) {
-            // Successful authentication, redirect to success.
-            res.redirect('/success');
+            // Successful authentication, redirect to saved route or success.
+            const returnTo = req.session.returnTo;
+            delete req.session.returnTo;
+            res.redirect(returnTo || '/success');
         });
 };
