@@ -9,13 +9,13 @@ dotenv.config();
 function createServer(app) {
     const port = process.env.PORT;
     if (process.env.NODE_ENV === 'production') {
-        // In production don't use HTTP
+        // In production use HTTP
         console.log("Production");
         const http_server = http.createServer(app).listen(port, () => {
             console.log('HTTP server listening on: ', http_server.address());
         });
     } else {
-        // In development use HTTP
+        // In development use HTTPS
         console.log("Development");
         var server = process.env.SERVER;
         /*  CERTIFICATE */
