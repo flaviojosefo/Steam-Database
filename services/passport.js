@@ -10,7 +10,7 @@ dotenv.config();
  * as req.session.passport.user so that it persists across accesses.
  * See: https://stackoverflow.com/questions/27637609/understanding-passport-serialize-deserialize
  * Here, since no database is used, the full user profile has to be stored in the session.
- */ 
+ */
 passport.serializeUser((user, done) => {
     done(null, user);
 });
@@ -31,7 +31,8 @@ passport.use(
         {
             clientID: process.env.CLIENT_ID,
             clientSecret: process.env.CLIENT_SECRET,
-            callbackURL: process.env.REDIRECT_URL
+            callbackURL: process.env.REDIRECT_URL,
+            proxy: true
         },
         // Verify callback
         (accessToken, refreshToken, params, profile, done) => {
@@ -41,4 +42,4 @@ passport.use(
             console.log('OAuth2 params:', params);
             return done(null, profile);
         }
-));
+    ));
