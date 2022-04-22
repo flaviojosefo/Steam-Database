@@ -32,6 +32,9 @@ passport.use(
             clientID: process.env.CLIENT_ID,
             clientSecret: process.env.CLIENT_SECRET,
             callbackURL: process.env.REDIRECT_URL
+            // Tell passport to trust the HTTPS proxy
+            // callbackURL: process.env.REDIRECT_URL,
+            // proxy: true
         },
         // Verify callback
         (accessToken, refreshToken, params, profile, done) => {
