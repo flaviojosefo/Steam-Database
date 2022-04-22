@@ -22,6 +22,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.enable("trust proxy");
 require('./routes/authRoutes')(app);
 // Create the server according to environment
 createServer(app);
