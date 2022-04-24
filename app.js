@@ -3,11 +3,11 @@ const app = express();
 const session = require('express-session');
 
 const passport = require('passport');
-const { createServer } = require('./services/https');
+const { createServer } = require('./services/server');
 require('./services/passport');
 
 // const {port, https, certs} = require('./services/https');
-require('./services/https');
+require('./services/server');
 /*  VIEW ENGINE */
 app.set('view engine', 'ejs');
 
