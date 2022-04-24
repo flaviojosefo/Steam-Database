@@ -1,26 +1,25 @@
-/*  HTTPS */
-const https = require("https");
-const http = require('http');
-const fs = require("fs"),
-    dotenv = require('dotenv');
-
-// Get the configuration values
+/*  Get config and create server */
+dotenv = require('dotenv');
 dotenv.config();
+const port = process.env.PORT;
+
 function createServer(app) {
-    const port = process.env.PORT;
     if (process.env.NODE_ENV === 'production') {
-        // In production use HTTP
         console.log("Production");
+        // In production use HTTP
+        const http = require('http');
         const http_server = http.createServer(app).listen(port, () => {
             console.log('HTTP server listening on: ', http_server.address());
         });
     } else {
-        // In development use HTTPS
         console.log("Development");
-        var server = process.env.SERVER;
-        /*  CERTIFICATE */
-        var keyname = "./certs/" + server + "-key.pem";
-        var certname = "./certs/" + server + ".pem";
+        // In development use HTTPS
+        const https = require("https"),
+            fs = require("fs"),
+            server = process.env.SERVER;
+        /*  Certificate and key files */
+        const keyname = "./certs/" + server + "-key.pem",
+            certname = "./certs/" + server + ".pem";
 
         console.log("Using key:", keyname);
         console.log("Using crt:", certname);
