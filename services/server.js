@@ -6,6 +6,8 @@ const port = process.env.PORT;
 function createServer(app) {
     if (process.env.NODE_ENV === 'production') {
         console.log("Production");
+        // Tell passport to trust the HTTPS proxy
+        app.enable("trust proxy");
         // In production use HTTP
         const http = require('http');
         const http_server = http.createServer(app).listen(port, () => {
@@ -21,8 +23,7 @@ function createServer(app) {
         const keyname = "./certs/" + server + "-key.pem",
             certname = "./certs/" + server + ".pem";
 
-        console.log("Using key:", keyname);
-        console.log("Using crt:", certname);
+        console.log("Using cert:", certname, "key:", keyname);
         console.log();
 
         const certs = {
