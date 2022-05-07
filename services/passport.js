@@ -12,6 +12,7 @@ dotenv.config();
  * Here, since no database is used, the full user profile has to be stored in the session.
  */
 passport.serializeUser((user, done) => {
+    console.log('Serialiazing user:', user._json);
     done(null, user);
 });
 
@@ -40,7 +41,7 @@ passport.use(
         (accessToken, refreshToken, params, profile, done) => {
             console.log('Access Token:', accessToken);
             console.log('Refresh Token:', refreshToken);
-            console.log('User profile:', profile._json);
+            // console.log('User profile:', profile._json);
             console.log('OAuth2 params:', params);
             return done(null, profile);
         }
