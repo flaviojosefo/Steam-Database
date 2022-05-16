@@ -1,9 +1,8 @@
+// Get the configuration values
+require('dotenv').config();
+
 const passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-
-// Get the configuration values
-dotenv = require('dotenv');
-dotenv.config();
 
 /*
  * After a successful authentication, store the user in the session
@@ -12,8 +11,14 @@ dotenv.config();
  * Here, since no database is used, the full user profile has to be stored in the session.
  */
 passport.serializeUser((user, done) => {
-    console.log('Serialiazing user:', user._json);
-    done(null, user);
+	// Serialize a shorter version of the user profile
+	const User = {
+		id: user.id,
+		displayName: user.displayName,
+		emails: user.emails,
+	};
+    console.log('Serialiazing user:', User);
+    done(null, User);
 });
 
 /*
@@ -39,8 +44,8 @@ passport.use(
         },
         // Verify callback
         (accessToken, refreshToken, params, profile, done) => {
-            console.log('Access Token:', accessToken);
-            console.log('Refresh Token:', refreshToken);
+            // console.log('Access Token:', accessToken);
+            // console.log('Refresh Token:', refreshToken);
             // console.log('User profile:', profile._json);
             console.log('OAuth2 params:', params);
             return done(null, profile);
