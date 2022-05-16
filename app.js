@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const session = require('express-session');
-const MongoStore = require('connect-mongo'); // for V.4
+const MongoStore = require('connect-mongo');
 
 const passport = require('passport');
 const { createServer } = require('./services/server');

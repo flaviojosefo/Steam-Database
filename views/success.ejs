@@ -5,9 +5,9 @@
         Google Profile Information</p>
       <hr class="my-4">
       <p><%= message %></p>
-      <p>Google_Id: <%= user.id  %></p>
-      <p>Name: <%= user.displayName %></p>
-      <p>Email Address: <%= user.emails[0].value %></p>
+      <p>Google_Id: <%= user.googleId  %></p>
+      <p>Name: <%= user.name %></p>
+      <p>Email Address: <%= user.email %></p>
   </div>
 </main>
 <%- include('foot'); -%>
