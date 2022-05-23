@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+var mongoose = require('mongoose');
 
 const passport = require('passport');
 const { createServer } = require('./services/server');
@@ -19,6 +20,9 @@ const dbOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }
+
+// Establish a general mongoose connection to the DB
+mongoose.connect(dbString, dbOptions);
 
 app.use(session({
     secret: process.env.SECRET,

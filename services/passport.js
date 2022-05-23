@@ -4,8 +4,7 @@ require('dotenv').config();
 const passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-const userTable = require('../models/User');
-const User = userTable.models.User;
+const User = require('../models/User');
 
 /*
  * After a successful authentication, store the user's (object) id in the session
