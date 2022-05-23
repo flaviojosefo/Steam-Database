@@ -8,21 +8,21 @@ const userTable = require('../models/User');
 const User = userTable.models.User;
 
 /*
- * After a successful authentication, store the user in the session
- * as req.session.passport.user so that it persists across accesses.
- * See: https://stackoverflow.com/questions/27637609/understanding-passport-serialize-deserialize
+ * After a successful authentication, store the user's (object) id in the session
+ * as req.session.passport.user.id so that it persists across accesses.
  */
 passport.serializeUser((user, done) => {
-    done(null, user._id);
+    done(null, user.id);
 });
 
 /*
-* On each new access, retrieve the user profile from the session and provide it as req.user
-* so that routes detect if there is a valid user context. 
+* On each new access, retrieve the user id from the current session;
+* look it up on the database and return a result (user) 
 */
-passport.deserializeUser( async (id, done) => {
-    user = await User.findOne({ _id: id });
-	done(null, user);
+passport.deserializeUser((id, done) => {
+    User.findById(id, (err, user) => {
+		done(err, user);
+	});
 });
 
 /*  Google AUTH  */
