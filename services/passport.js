@@ -44,28 +44,29 @@ passport.use(
             // console.log('User profile:', profile._json);
             // console.log('OAuth2 params:', params);
 			
-			var thisUser;
-			const existingUser = await User.findOne({ googleId: profile.id });
-			
-			if (existingUser) {
-				console.log('User already exists!');
-				thisUser = existingUser;
-			} else {
-				thisUser = new User({
-					googleId: profile.id,
-					name: profile.displayName,
-					email: profile.emails[0].value,
-					accessToken: accessToken,
-					refreshToken: refreshToken
-				});
-				
-				thisUser.save()
-					.then((user) => {
-						console.log('Registered user:', user);
-					}
-				);
+			try {
+				let thisUser = await User.findOne({ googleId: profile.id });
+				let logMessage = '';
+				if (thisUser) {
+					logMessage = 'Found existing user:';
+					// update user info (access token, etc.) and save it to the DB
+				} else {
+					thisUser = await new User(
+						{
+							googleId: profile.id,
+							name: profile.displayName,
+							email: profile.emails[0].value,
+							accessToken: accessToken,
+							refreshToken: refreshToken
+						}).save();
+					logMessage = 'Registered new user:';
+				}
+				console.log(logMessage, thisUser);
+				done(null, thisUser);
+			} catch (err) {
+				// Print error and exit app
+				console.error(err);
+				process.exit(1);
 			}
-			
-            return done(null, thisUser);
         }
     ));
