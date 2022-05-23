@@ -6,7 +6,9 @@ const userSchema = new mongoose.Schema({
     name: String,
     email: String,
     accessToken: String,
-	refreshToken: String
+	creationDate: String,
+	expiryDate: String,
+	photo: String
 });
 
 const User = mongoose.model('users', userSchema);

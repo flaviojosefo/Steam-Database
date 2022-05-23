@@ -57,7 +57,9 @@ passport.use(
 							name: profile.displayName,
 							email: profile.emails[0].value,
 							accessToken: accessToken,
-							refreshToken: refreshToken
+							creationDate: getDate().format(new Date()),
+							expiryDate: getExpiryDate(params.expires_in),
+							photo: profile.photos[0].value
 						}).save();
 					logMessage = 'Registered new user:';
 				}
@@ -70,3 +72,15 @@ passport.use(
 			}
         }
     ));
+	
+// Calculates and returns an expiration date
+function getExpiryDate(expiryTime) {
+	const expiryDate = new Date();
+	expiryDate.setSeconds(expiryDate.getSeconds() + expiryTime);
+	return getDate().format(expiryDate);
+};
+
+// Returns a date in a specific style
+function getDate() {
+	return new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeStyle: 'long' });
+}
