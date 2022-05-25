@@ -48,9 +48,13 @@ passport.use(
 				let thisUser = await User.findOne({ googleId: profile.id });
 				let logMessage = '';
 				if (thisUser) {
+					// Update user's access token and expiration date and save it to the DB
 					logMessage = 'Found existing user:';
-					// update user info (access token, etc.) and save it to the DB
+					thisUser.accessToken = accessToken;
+					thisUser.expiryDate = getExpiryDate(params.expires_in);
+					await thisUser.save();
 				} else {
+					// Create a new user and add it to the DB
 					thisUser = await new User(
 						{
 							googleId: profile.id,
