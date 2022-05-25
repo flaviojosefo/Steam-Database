@@ -4,14 +4,18 @@ const { isAuth } = require('../services/middleware');
 module.exports = app => {
     
     app.get('/', (req, res) => {
-        let date = new Intl.DateTimeFormat('en-GB', {
-            dateStyle: 'full',
-            timeStyle: 'long'
-        }).format(new Date());
-        res.render('index', {
-            date_tag: date,
-            message_tag: 'Access your Google Account',
-        });
+		if (req.isAuthenticated()) {
+			res.redirect('/success');
+		} else {
+			let date = new Intl.DateTimeFormat('en-GB', {
+				dateStyle: 'full',
+				timeStyle: 'long'
+			}).format(new Date());
+			res.render('index', {
+				date_tag: date,
+				message_tag: 'Access your Google Account',
+			});
+		}
     });
 
     app.get('/home'),  (req, res) => {
