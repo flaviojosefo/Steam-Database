@@ -6,7 +6,8 @@ const gameSchema = new mongoose.Schema({
     steamId: String,
     genres: Array,
     developer: String,
-	user: String
+	user: String,
+	creationDate: String
 });
 
 const GameItem = mongoose.model('items', gameSchema);
