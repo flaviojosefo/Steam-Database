@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Creates the schema for a User.
+// Creates the schema for a User
 const userSchema = new mongoose.Schema({
     googleId: String,
     name: String,

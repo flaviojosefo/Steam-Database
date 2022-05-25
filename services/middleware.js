@@ -13,4 +13,4 @@ module.exports = {
         req.session.returnTo = req.originalUrl;
         res.redirect('/login');
     }
-  };
+};
