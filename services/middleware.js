@@ -5,12 +5,12 @@
  * and then redirects to `/login`.
  *
  */
-module.exports = () => {
-    return function isAuth (req, res, next) {
+module.exports = {
+    isAuth: (req, res, next) => {
         if (req.user) {
             return next(); 
         }
         req.session.returnTo = req.originalUrl;
         res.redirect('/login');
-    };
+    }
   };

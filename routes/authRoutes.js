@@ -1,5 +1,5 @@
 const passport = require('passport');
-const isAuth = require('../services/middleware');
+const { isAuth } = require('../services/middleware');
 
 module.exports = app => {
     
@@ -27,7 +27,7 @@ module.exports = app => {
         });
     });
 
-    app.get('/resource', isAuth(), (req, res, next) => {
+    app.get('/resource', isAuth, (req, res, next) => {
         res.render('resource', {
             authenticated: req.isAuthenticated()
         });
