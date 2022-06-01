@@ -2,11 +2,29 @@ const mongoose = require('mongoose');
 
 // Creates the schema for a Game
 const gameSchema = new mongoose.Schema({
-    name: String,
-    steamId: String,
-    genres: Array,
-    developer: String,
-	user: String
+    title: {
+		type: String,
+		trim: true
+	},
+	steamId: {
+		type: String,
+		trim: true
+	},
+	genres: {
+		type: Array
+	},
+	developer: {
+		type: String,
+		trim: true
+	},
+	addedBy: {
+		type: String,
+		required: true,
+		trim: true
+	},
+	addedAt: {
+		type: String
+	}
 });
 
 const GameItem = mongoose.model('items', gameSchema);
