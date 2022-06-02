@@ -72,5 +72,6 @@ module.exports = app => {
             const returnTo = req.session.returnTo;
             delete req.session.returnTo;
             res.redirect(returnTo || '/success');
-        });
+        }
+	);
 };
