@@ -10,6 +10,7 @@ const passport = require('passport');
 const { createServer } = require('./services/server');
 require('./services/passport');
 
+app.use(express.urlencoded({ extended: true }));
 // const {port, https, certs} = require('./services/https');
 require('./services/server');
 /*  VIEW ENGINE */
