@@ -1,9 +1,62 @@
 <%- include('head'); -%>
-<main>
-	<div class="jumbotron">
-		<p class="lead">Add a Game to your Library</p>
-        <hr class="my-4">
-        <p>Game Title: <input type="text"></p>
-	</div>
-</main>
+	<main>
+		<div class="jumbotron">
+			<p class="lead"><i class="fa fa-plus"></i> Add a Game to the Store</p>
+			<hr class="my-4">
+				<form method="POST" action="/games/add">
+					<p>
+						<label for="title">Game Title:</label>
+						<input type="text" name="title">
+					</p>
+					<p>
+						<label for="steamId">Steam ID:</label>
+						<input type="text" name="steamId" style="margin-left: 12px">
+					</p>
+					<p>
+						<label for="genres">Genres:</label>
+						<span id="list" style="display: inline-block; height: 30px; margin-left: 26px"></span>
+						<button type="button" onclick="addGenre()" class="btn btn-light btn-sm" style="height: 30px; margin-bottom: 5px">
+							<i class="fa fa-plus-square" aria-hidden="true"></i> Add Genre
+						</button>
+					</p>
+					<p>
+						<label for="developer">Developer:</label>
+						<input type="text" name="developer" style="margin-left: 3px">
+					</p>
+					<p>
+						<input type="submit" class="btn btn-primary" value="Add Game">
+					</p>
+				</form>
+		</div>
+		
+	</main>
+	<script type="text/javascript">
+		var parent = document.getElementById("list");
+	
+		//Create array of options to be added
+		var options = ["Action","Platform","Shooter","Survival","Adventure","Horror","MMO","RPG","Simulation","Strategy"];
+		
+		var currentOptions = 0;
+		const maxOptions = 5;
+		
+		function addGenre() {
+			if (currentOptions >= maxOptions) return;
+		
+			//Create and append select list
+			var selectList = document.createElement("select");
+			selectList.setAttribute("name", "genres");
+			selectList.setAttribute("style", "height: 30px; margin-right: 4px;");
+			parent.appendChild(selectList);
+			
+			//Create and append the options
+			for (let i = 0; i < options.length; i++) {
+				var option = new Option(options[i], options[i]);
+				selectList.appendChild(option);
+			}
+			
+			currentOptions++;
+		}
+		
+		addGenre();
+	</script>
 <%- include('foot'); -%>
