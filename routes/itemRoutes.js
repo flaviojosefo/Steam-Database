@@ -13,6 +13,22 @@ router.get('/add', /*isAuth,*/ (req, res) => {
 	});
 });
 
+/*router.get('/store', (req, res) => {
+	res.render('store');
+	
+	// Get games on store db
+	
+	// Send them to the rendered page
+}
+
+router.get('store/:id', (req, res) => {
+	
+}
+
+router.get('/library', (req, res) => {
+	res.render('library');
+}*/
+
 router.post('/add', /*isAuth, */async (req, res) => {
 	//console.log(req.body);
 	//console.log(formIsValid(req.body));
@@ -23,7 +39,8 @@ router.post('/add', /*isAuth, */async (req, res) => {
 		steamId: req.body.steamId,
 		genres: req.body.genres,
 		developer: req.body.developer,
-		addedBy: getCurrentUser(req),
+		addedBy: getCurrentUser(req)[0],
+		addedById: getCurrentUser(req)[1],
 		addedAt: getDate().format(new Date())
 	});
 	
@@ -49,9 +66,9 @@ function formIsValid(body) {
 
 function getCurrentUser(req) {
 	if (req.isAuthenticated()) {
-		return req.user.googleId;
+		return [req.user.name, req.user.googleId];
 	} else {
-		return "Unknown";
+		return ["Unknown", 0];
 	}
 }
 

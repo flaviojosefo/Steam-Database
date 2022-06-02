@@ -22,6 +22,10 @@ const gameSchema = new mongoose.Schema({
 		required: true,
 		trim: true
 	},
+	addedById: {
+		type: String,
+		required: true
+	},
 	addedAt: {
 		type: String
 	}
