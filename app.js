@@ -16,6 +16,8 @@ require('./services/server');
 /*  VIEW ENGINE */
 app.set('view engine', 'ejs');
 
+app.use(express.static('public'));
+
 const dbString = process.env.DB_STRING;
 const dbOptions = {
     useNewUrlParser: true,

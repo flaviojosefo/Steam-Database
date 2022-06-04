@@ -1,0 +1,62 @@
+<%- include('head'); -%>
+	<main>
+		<div class="jumbotron">
+			<p class="lead"><i class="fa fa-gamepad" aria-hidden="true"></i> Search the Store for your favourite game!</p>
+				<div class="row-fluid">
+					<table class="table">
+						<thead>
+							<tr>
+								<th style="width:90px">AppID</th >
+								<th class="no-sort" style="width:150px"></th>
+								<th>Game</th>
+								<th style="width:147px"></th>
+							</tr>
+						</thead>
+						<style>
+							td {
+								vertical-align: middle !important;
+							}
+						</style>
+						<tbody>
+							<% for (var i=0; i < gamesList.length; i++) { %>
+								<tr>
+									<td>
+										<a>
+											<%= gamesList[i].steamId %>
+										</a>
+									</td>
+									<td>
+										<img width="126px" src="/images/applogo.svg">
+									</td>
+									<td>
+										<b class="muted">
+											<%= gamesList[i].title %>
+										</b>
+										<div>
+											<i>
+												<% for (var j=0; j < gamesList[i].genres.length; j++) { %>
+													<%= gamesList[i].genres[j] %><% if(j+1 == gamesList[i].genres.length) continue %>,
+												<% } %>
+											</i>
+										</div>
+									</td>
+									<td align="center">
+										<button style="height: 36px" type="button" class="btn btn-primary btn-sm" onclick="1">
+											<i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Library
+										</button>
+									</td>
+								</tr>
+							<% } %>
+						</tbody>
+					</table>
+				</div>
+		</div>
+	</main>
+	<script type="text/javascript">
+		//const gameExists = JSON.parse('{"url":"https://store.steampowered.com/api/appdetails?appids=1085660"}');
+		//console.log(gameExists);
+		function fetchLogo() {
+			
+		}
+	</script>
+<%- include('foot'); -%>

@@ -1,7 +1,8 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
+const fetch = require('node-fetch');
 const { isAuth } = require('../services/middleware');
-const Game = require('../models/GameItem');
+const Game = require('../models/Game');
+const Library = require('../models/Library');
 
 router.get('/', (req, res) => {
 	res.redirect(req.originalUrl + '/add');
@@ -13,15 +14,24 @@ router.get('/add', /*isAuth,*/ (req, res) => {
 	});
 });
 
-/*router.get('/store', (req, res) => {
-	res.render('store');
+router.get('/store', async (req, res) => {
+	
+	const games = await Game.find();
+	
+	//const externalInfo = await getSteamInfo('1085660');
+	//console.log(externalInfo.success);
+	
+	res.render('store', {
+		user: req.user,
+		gamesList: games
+	});
 	
 	// Get games on store db
 	
 	// Send them to the rendered page
-}
+});
 
-router.get('store/:id', (req, res) => {
+/*router.get('store/:id', (req, res) => {
 	
 }
 
@@ -57,6 +67,29 @@ router.post('/add', /*isAuth, */async (req, res) => {
 	}
 	res.redirect(req.originalUrl);
 });
+
+async function getSteamInfo(appId) {
+	
+	const steamAppUrl = 'https://store.steampowered.com/api/appdetails?appids=' + appId;
+	//console.log(steamAppUrl);
+	
+	// Get JSON from specified url
+	const getJSON = async url => {
+		const response = await fetch(url);
+		if(!response.ok) // check if response worked (no 404 errors etc...)
+		throw new Error(response.statusText);
+
+		const data = response.json(); // get JSON from the response
+		return data; // returns a promise, which resolves to this data value
+	}
+	
+	return await getJSON(steamAppUrl).then(data => {
+		//console.log(data[parseInt(appId)]);
+		return data[parseInt(appId)];
+	}).catch(err => {
+		console.error(err);
+	});
+}
 
 function formIsValid(body) {
 	if(body.title.trim().length == 0) return false;
