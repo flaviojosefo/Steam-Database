@@ -15,20 +15,24 @@ router.get('/add', /*isAuth,*/ (req, res) => {
 });
 
 router.get('/store', async (req, res) => {
-	
+	// Get games on store db
 	const games = await Game.find();
+	let logos = [];
+	
+	// Get a logo for each game, searching by the game's Id
+	for (let i = 0; i < games.length; i++) {
+		logos.push(await fetchLogo(games[i].steamId))
+	}
 	
 	//const externalInfo = await getSteamInfo('1085660');
 	//console.log(externalInfo.success);
 	
+	// Send relevant info to the 'ejs' file
 	res.render('store', {
 		user: req.user,
-		gamesList: games
+		gamesList: games,
+		gameLogos: logos
 	});
-	
-	// Get games on store db
-	
-	// Send them to the rendered page
 });
 
 /*router.get('store/:id', (req, res) => {
@@ -90,6 +94,29 @@ async function getSteamInfo(appId) {
 		console.error(err);
 	});
 }
+
+// Return a logo image as a URL
+async function fetchLogo(appId) {
+	
+	// Default URL for a game's logo
+	const logoUrl = "https://cdn.akamai.steamstatic.com/steam/apps/" + appId + "/capsule_231x87.jpg";
+	
+	// Check if URL returns empty (e.g.: 404)
+	if (await urlExists(logoUrl)) {
+		//console.log('logo found!');
+		
+		// Return an external logo
+		return logoUrl;
+	} else {
+		//console.log('logo NOT found!');
+		
+		// Return a default logo in the server
+		return "/images/applogo.svg";
+	}
+}
+
+// Check a URL's 'ok' status
+async function urlExists(url) { return (await fetch(url)).ok }
 
 function formIsValid(body) {
 	if(body.title.trim().length == 0) return false;
