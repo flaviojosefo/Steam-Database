@@ -6,9 +6,10 @@ const librarySchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	games: {
-		type: Array
-	}
+	games: [{
+		gameId: String,
+		addedAt: String
+	}]
 });
 
 module.exports = mongoose.model('libraries', librarySchema);

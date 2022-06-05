@@ -12,6 +12,7 @@ router.get('/add', /*isAuth,*/ (req, res) => {
 });
 
 router.get('/store', async (req, res) => {
+	
 	// Get games on store DB and reverse order
 	let storeGames = await Game.find();
 	storeGames = storeGames.reverse();
@@ -31,27 +32,42 @@ router.get('/store', async (req, res) => {
 	});
 });
 
-function testFunc(user) {
-	if (user.isAuthenticated) {
-		console.log('user is auth');
-	} else {
-		console.log('user is NOT auth');
-	}
-}
-
 router.get('/library', isAuth, async (req, res) => {
 	
 	// Check if we get data on a query
 	if(req.query.gameId) {
-		// Do something
-		console.log('redirect!');
+		
+		// Create a new game object
+		/*const userLib = new Library({
+			ownderId: req.user.googleId,
+			games: {
+				gameId: req.query.gameId,
+				addedAt: getDate().format(new Date())
+			}
+		});*/
+		
+		const userLib = await Library.findOne({ ownderId: req.user.googleId });
+		
+		try {
+			userLib.games.push({ gameId: req.query.gameId, addedAt: getDate().format(new Date()) });
+			await userLib.save();
+			console.log('Added game:', userLib);
+		} catch (err) {
+			console.error(err);
+			res.render('error', {
+				message_tag: 'Failed adding a Game to the Library'
+			});
+			return;
+		}
+		
 		// Redirect the user to the normal library URL
 		res.redirect(url.parse(req.originalUrl).pathname);
 		return;
 	}
 	
 	// Get games on user's library and reverse order
-	let userGames = await Library.find({ user: req.user.googleId});
+	const userLib = await Library.findOne({ ownderId: req.user.googleId });
+	let userGames = userLib.games;
 	userGames = userGames.reverse();
 	
 	let logos = [];
@@ -99,6 +115,7 @@ router.post('/add', /*isAuth, */async (req, res) => {
             message_tag: 'Failed creating a new Game'
         });
 	}
+	
 	res.redirect(req.originalUrl);
 });
 
