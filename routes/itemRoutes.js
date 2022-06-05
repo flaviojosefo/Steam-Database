@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const fetch = require('node-fetch');
+const url = require('url');
 const { isAuth } = require('../services/middleware');
 const Game = require('../models/Game');
 const Library = require('../models/Library');
@@ -22,9 +23,6 @@ router.get('/store', async (req, res) => {
 		logos.push(await fetchLogo(storeGames[i].steamId))
 	}
 	
-	//const externalInfo = await getSteamInfo('1085660');
-	//console.log(externalInfo.success);
-	
 	// Send relevant info to the 'ejs' file
 	res.render('store', {
 		user: req.user,
@@ -33,7 +31,25 @@ router.get('/store', async (req, res) => {
 	});
 });
 
+function testFunc(user) {
+	if (user.isAuthenticated) {
+		console.log('user is auth');
+	} else {
+		console.log('user is NOT auth');
+	}
+}
+
 router.get('/library', isAuth, async (req, res) => {
+	
+	// Check if we get data on a query
+	if(req.query.gameId) {
+		// Do something
+		console.log('redirect!');
+		// Redirect the user to the normal library URL
+		res.redirect(url.parse(req.originalUrl).pathname);
+		return;
+	}
+	
 	// Get games on user's library and reverse order
 	let userGames = await Library.find({ user: req.user.googleId});
 	userGames = userGames.reverse();
@@ -53,7 +69,8 @@ router.get('/library', isAuth, async (req, res) => {
 });
 
 /*router.get('store/:id', (req, res) => {
-	
+	//const externalInfo = await getSteamInfo('1085660');
+	//console.log(externalInfo.success);
 }*/
 
 router.post('/add', /*isAuth, */async (req, res) => {

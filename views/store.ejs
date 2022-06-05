@@ -6,7 +6,7 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th style="width:90px">AppID</th >
+								<th style="width:90px">ID</th >
 								<th class="no-sort" style="width:150px"></th>
 								<th>Game</th>
 								<th style="width:147px"></th>
@@ -41,7 +41,7 @@
 										</div>
 									</td>
 									<td align="center">
-										<button style="height: 36px" type="button" class="btn btn-primary btn-sm" onclick="1">
+										<button style="height: 36px" type="button" class="btn btn-primary btn-sm" onclick="location.href='/games/library/?gameId=<%= gamesList[i].steamId %>';">
 											<i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Library
 										</button>
 									</td>
