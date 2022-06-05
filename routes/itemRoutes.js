@@ -33,9 +33,9 @@ router.get('/store', async (req, res) => {
 	});
 });
 
-router.get('/library', async (req, res) => {
+router.get('/library', isAuth, async (req, res) => {
 	// Get games on user's library and reverse order
-	let userGames = await Library.find();
+	let userGames = await Library.find({ user: req.user.googleId});
 	userGames = userGames.reverse();
 	
 	let logos = [];
