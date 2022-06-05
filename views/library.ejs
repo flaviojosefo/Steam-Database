@@ -1,9 +1,9 @@
 <%- include('head'); -%>
 	<main>
 		<div class="jumbotron">
-			<p class="lead"><i class="fa fa-steam" aria-hidden="true"></i> Search the Store for your favourite game!</p>
+			<p class="lead"><i class="fa fa-gamepad" aria-hidden="true"></i> My Library</p>
 				<div class="row-fluid">
-					<table class="table">
+					<table class="table" id="empty-parent">
 						<thead>
 							<tr>
 								<th style="width:90px">AppID</th >
@@ -18,11 +18,11 @@
 							}
 						</style>
 						<tbody>
-							<% for (var i=0; i < gamesList.length; i++) { %>
+							<% for (var i=0; i < ownedGames.length; i++) { %>
 								<tr>
 									<td>
 										<a>
-											<%= gamesList[i].steamId %>
+											<%= ownedGames[i].steamId %>
 										</a>
 									</td>
 									<td>
@@ -30,12 +30,12 @@
 									</td>
 									<td>
 										<b class="muted">
-											<%= gamesList[i].title %>
+											<%= ownedGames[i].title %>
 										</b>
 										<div>
 											<i>
-												<% for (var j=0; j < gamesList[i].genres.length; j++) { %>
-													<%= gamesList[i].genres[j] %><% if(j+1 == gamesList[i].genres.length) continue %>,
+												<% for (var j=0; j < ownedGames[i].genres.length; j++) { %>
+													<%= ownedGames[i].genres[j] %><% if(j+1 == ownedGames[i].genres.length) continue %>,
 												<% } %>
 											</i>
 										</div>
@@ -52,4 +52,10 @@
 				</div>
 		</div>
 	</main>
+	<script>
+		<% if (ownedGames.length == 0) { %>
+			const empty = document.getElementById('empty-parent');
+			empty.insertAdjacentHTML('afterend', '<center><h4><i>It seems you have no games...yet! Get some from the <a href="/games/store" class="link-primary">Store!</a></i></h4></center>');
+		<% } %>
+	</script>
 <%- include('foot'); -%>

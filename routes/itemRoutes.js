@@ -4,10 +4,6 @@ const { isAuth } = require('../services/middleware');
 const Game = require('../models/Game');
 const Library = require('../models/Library');
 
-router.get('/', (req, res) => {
-	res.redirect(req.originalUrl + '/add');
-});
-
 router.get('/add', /*isAuth,*/ (req, res) => {
 	res.render('add_game', {
 		user: req.user
@@ -15,13 +11,15 @@ router.get('/add', /*isAuth,*/ (req, res) => {
 });
 
 router.get('/store', async (req, res) => {
-	// Get games on store db
-	const games = await Game.find();
+	// Get games on store DB and reverse order
+	let storeGames = await Game.find();
+	storeGames = storeGames.reverse();
+	
 	let logos = [];
 	
 	// Get a logo for each game, searching by the game's Id
-	for (let i = 0; i < games.length; i++) {
-		logos.push(await fetchLogo(games[i].steamId))
+	for (let i = 0; i < storeGames.length; i++) {
+		logos.push(await fetchLogo(storeGames[i].steamId))
 	}
 	
 	//const externalInfo = await getSteamInfo('1085660');
@@ -30,17 +28,32 @@ router.get('/store', async (req, res) => {
 	// Send relevant info to the 'ejs' file
 	res.render('store', {
 		user: req.user,
-		gamesList: games,
+		gamesList: storeGames,
+		gameLogos: logos
+	});
+});
+
+router.get('/library', async (req, res) => {
+	// Get games on user's library and reverse order
+	let userGames = await Library.find();
+	userGames = userGames.reverse();
+	
+	let logos = [];
+	
+	// Get a logo for each game, searching by the game's Id
+	for (let i = 0; i < userGames.length; i++) {
+		logos.push(await fetchLogo(userGames[i].steamId))
+	}
+	
+	res.render('library', {
+		user: req.user,
+		ownedGames: userGames,
 		gameLogos: logos
 	});
 });
 
 /*router.get('store/:id', (req, res) => {
 	
-}
-
-router.get('/library', (req, res) => {
-	res.render('library');
 }*/
 
 router.post('/add', /*isAuth, */async (req, res) => {
