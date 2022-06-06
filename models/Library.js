@@ -7,7 +7,7 @@ const librarySchema = new mongoose.Schema({
 		required: true
 	},
 	games: [{
-		gameId: String,
+		steamId: String,
 		addedAt: String
 	}]
 });

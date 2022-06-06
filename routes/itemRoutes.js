@@ -34,42 +34,61 @@ router.get('/store', async (req, res) => {
 
 router.get('/library', isAuth, async (req, res) => {
 	
+	// Try to find a library from the logged user
+	let userLib = await Library.findOne({ ownderId: req.user.googleId });
+	
+	try {
+		// Check if user does NOT have a library
+		if (!userLib) {
+			// If not, create a new (empty) one
+			userLib = await new Library({
+				ownderId: req.user.googleId,
+				games: undefined
+			}).save();
+			console.log('Created library for user ' + req.user.name, userLib);
+		}
+	} catch (err) {
+		console.error(err);
+		res.render('error', {
+			message_tag: 'Failed adding a Game to the Library'
+		});
+		return;
+	}
+	
 	// Check if we get data on a query
-	if(req.query.gameId) {
-		
-		// Create a new game object
-		/*const userLib = new Library({
-			ownderId: req.user.googleId,
-			games: {
-				gameId: req.query.gameId,
-				addedAt: getDate().format(new Date())
-			}
-		});*/
-		
-		const userLib = await Library.findOne({ ownderId: req.user.googleId });
+	if (req.query.steamId) {
 		
 		try {
-			userLib.games.push({ gameId: req.query.gameId, addedAt: getDate().format(new Date()) });
-			await userLib.save();
-			console.log('Added game:', userLib);
+			// Check if the logged user has a library
+			if (userLib) {
+				// If it does, push the game's 'steamId' to the user's library
+				userLib.games.push({ 
+					steamId: req.query.steamId, 
+					addedAt: getDate().format(new Date()) 
+				});
+				await userLib.save();
+			}
+			console.log('Added game ' + req.query.steamId + ' to ' + req.user.name + '\'s Library');
+			
+			// Redirect the user to the normal library URL
+			res.redirect(url.parse(req.originalUrl).pathname);
 		} catch (err) {
 			console.error(err);
 			res.render('error', {
 				message_tag: 'Failed adding a Game to the Library'
 			});
-			return;
 		}
-		
-		// Redirect the user to the normal library URL
-		res.redirect(url.parse(req.originalUrl).pathname);
 		return;
 	}
 	
 	// Get games on user's library and reverse order
-	const userLib = await Library.findOne({ ownderId: req.user.googleId });
-	let userGames = userLib.games;
-	userGames = userGames.reverse();
+	//let gamesId = userLib.games;
+	//gamesId = gamesId.reverse();
+	//console.log(gamesId);
 	
+	// Fetch games info from store (by steamId)
+	//const userGames = await Game.find({ 'steamId': { $in: gamesId } });
+	const userGames = [];
 	let logos = [];
 	
 	// Get a logo for each game, searching by the game's Id
@@ -137,7 +156,7 @@ async function getSteamInfo(appId) {
 	return await getJSON(steamAppUrl).then(data => {
 		//console.log(data[parseInt(appId)]);
 		return data[parseInt(appId)];
-	}).catch(err => {
+	}).catch (err => {
 		console.error(err);
 	});
 }
