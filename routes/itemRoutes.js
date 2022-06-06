@@ -17,18 +17,33 @@ router.get('/store', async (req, res) => {
 	let storeGames = await Game.find();
 	storeGames = storeGames.reverse();
 	
-	let logos = [];
-	
 	// Get a logo for each game, searching by the game's Id
+	let logos = [];
 	for (let i = 0; i < storeGames.length; i++) {
 		logos.push(await fetchLogo(storeGames[i].steamId))
+	}
+	
+	// Array of games owned by user
+	let ownedGames = [];
+	
+	// Check if a user is logged in
+	if (req.isAuthenticated()) {
+		// Retrieve the user's library
+		const userLib = await Library.findOne({ ownderId: req.user.googleId });
+		
+		// Get games on user's library
+		let userGames = userLib.games;
+		
+		// Get user's owned games by steamId
+		userGames.forEach(function(currentValue) { ownedGames.push(currentValue.steamId); });
 	}
 	
 	// Send relevant info to the 'ejs' file
 	res.render('store', {
 		user: req.user,
 		gamesList: storeGames,
-		gameLogos: logos
+		gameLogos: logos,
+		ownedIds: ownedGames
 	});
 });
 
@@ -57,7 +72,6 @@ router.get('/library', isAuth, async (req, res) => {
 	
 	// Check if we get data on a query
 	if (req.query.steamId) {
-		
 		try {
 			// Check if the logged user has a library
 			if (userLib) {

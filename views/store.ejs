@@ -19,7 +19,7 @@
 						</style>
 						<tbody>
 							<% for (var i=0; i < gamesList.length; i++) { %>
-								<tr>
+								<tr height="75px">
 									<td>
 										<a>
 											<%= gamesList[i].steamId %>
@@ -41,9 +41,25 @@
 										</div>
 									</td>
 									<td align="center">
-										<button style="height: 36px" type="button" class="btn btn-primary btn-sm" onclick="location.href='/games/library/?steamId=<%= gamesList[i].steamId %>';">
-											<i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Library
-										</button>
+										<% if (ownedIds) { %>
+											<% let owned = false %>
+											<% for (var j=0; j < ownedIds.length; j++) { %>
+												<% if (gamesList[i].steamId == ownedIds[j]) { %>
+													<i>Game already owned!</i>
+													<% owned = true %>
+													<% break %>
+												<% } %>
+											<% } %>
+											<% if (!owned) { %>
+												<button style="height: 36px" type="button" class="btn btn-primary btn-sm" onclick="location.href='/games/library/?steamId=<%= gamesList[i].steamId %>';">
+													<i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Library
+												</button>
+											<% } %>
+										<% } else { %>
+											<button style="height: 36px" type="button" class="btn btn-primary btn-sm" onclick="location.href='/games/library/?steamId=<%= gamesList[i].steamId %>';">
+												<i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Library
+											</button>
+										<% } %>
 									</td>
 								</tr>
 							<% } %>
