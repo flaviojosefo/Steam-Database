@@ -50,7 +50,7 @@ router.get('/library', isAuth, async (req, res) => {
 	} catch (err) {
 		console.error(err);
 		res.render('error', {
-			message_tag: 'Failed adding a Game to the Library'
+			message_tag: 'Failed creating a user\'s Library'
 		});
 		return;
 	}
