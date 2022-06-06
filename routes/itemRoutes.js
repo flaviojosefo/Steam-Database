@@ -5,7 +5,7 @@ const { isAuth } = require('../services/middleware');
 const Game = require('../models/Game');
 const Library = require('../models/Library');
 
-router.get('/add', /*isAuth,*/ (req, res) => {
+router.get('/add', (req, res) => {
 	res.render('add_game', {
 		user: req.user
 	});
@@ -65,24 +65,29 @@ router.get('/library', isAuth, async (req, res) => {
 	} catch (err) {
 		console.error(err);
 		res.render('error', {
-			message_tag: 'Failed creating a user\'s Library'
+			message_tag: 'Failed creating a Library'
 		});
 		return;
 	}
 	
 	// Check if we get data on a query
 	if (req.query.steamId) {
+		// Check if the game is already owned by the user
+		let alreadyOwned = false;
+		userLib.games.forEach(function(currentValue) { if (currentValue.steamId == req.query.steamId) { alreadyOwned = true; } });
+		console.log('Game already owned: ' + alreadyOwned);
+		
 		try {
-			// Check if the logged user has a library
-			if (userLib) {
+			// Only add a game to the DB if the user doesn't own it
+			if (!alreadyOwned) {
 				// If it does, push the game's 'steamId' to the user's library
 				userLib.games.push({ 
 					steamId: req.query.steamId, 
 					addedAt: getDate().format(new Date()) 
 				});
 				await userLib.save();
+				console.log('Added game ' + req.query.steamId + ' to ' + req.user.name + '\'s Library');
 			}
-			console.log('Added game ' + req.query.steamId + ' to ' + req.user.name + '\'s Library');
 			
 			// Redirect the user to the normal library URL
 			res.redirect(url.parse(req.originalUrl).pathname);
@@ -106,7 +111,13 @@ router.get('/library', isAuth, async (req, res) => {
 	
 	// Fetch games info from store (by steamId)
 	let gamesInfo = await Game.find({ 'steamId': { $in: gamesId } });
-	gamesInfo = gamesInfo.reverse();
+	
+	const itemPositions = {};
+	for (const [index, steamId] of gamesId.entries()) {
+		itemPositions[steamId] = index;
+	}
+	
+	gamesInfo.sort((a, b) => itemPositions[a.steamId] - itemPositions[b.steamId]);
 	//console.log(gamesInfo);
 	
 	// Get a logo for each game, searching by the game's steamId
@@ -128,7 +139,7 @@ router.get('/library', isAuth, async (req, res) => {
 	//console.log(externalInfo.success);
 }*/
 
-router.post('/add', /*isAuth, */async (req, res) => {
+router.post('/add', async (req, res) => {
 	//console.log(req.body);
 	//console.log(formIsValid(req.body));
 	
