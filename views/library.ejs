@@ -34,15 +34,15 @@
 										</b>
 										<div>
 											<i>
-												<% //for (var j=0; j < ownedGames[i].genres.length; j++) { %>
-													<%= //ownedGames[i].genres[j] %><% //if(j+1 == ownedGames[i].genres.length) continue %>,
-												<% //} %>
+												<% for (var j=0; j < ownedGames[i].genres.length; j++) { %>
+													<%= ownedGames[i].genres[j] %><% if(j+1 == ownedGames[i].genres.length) continue %>,
+												<% } %>
 											</i>
 										</div>
 									</td>
 									<td align="center">
-										<button style="height: 36px" type="button" class="btn btn-primary btn-sm" onclick="1">
-											<i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Library
+										<button style="height: 36px" type="button" class="btn btn-danger btn-sm" onclick="1">
+											<i class="fa fa-trash" aria-hidden="true"></i> Remove Game
 										</button>
 									</td>
 								</tr>

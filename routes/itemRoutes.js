@@ -82,23 +82,29 @@ router.get('/library', isAuth, async (req, res) => {
 	}
 	
 	// Get games on user's library and reverse order
-	//let gamesId = userLib.games;
-	//gamesId = gamesId.reverse();
+	let userGames = userLib.games;
+	userGames = userGames.reverse();
+	
+	// Get an array with the steamIds of each game
+	let gamesId = [];
+	userGames.forEach(function(currentValue) { gamesId.push(currentValue.steamId); });
 	//console.log(gamesId);
 	
 	// Fetch games info from store (by steamId)
-	//const userGames = await Game.find({ 'steamId': { $in: gamesId } });
-	const userGames = [];
-	let logos = [];
+	let gamesInfo = await Game.find({ 'steamId': { $in: gamesId } });
+	gamesInfo = gamesInfo.reverse();
+	//console.log(gamesInfo);
 	
-	// Get a logo for each game, searching by the game's Id
+	// Get a logo for each game, searching by the game's steamId
+	// Why not use forEach here aswell? Because of 'await'
+	let logos = [];
 	for (let i = 0; i < userGames.length; i++) {
 		logos.push(await fetchLogo(userGames[i].steamId))
 	}
 	
 	res.render('library', {
 		user: req.user,
-		ownedGames: userGames,
+		ownedGames: gamesInfo,
 		gameLogos: logos
 	});
 });
