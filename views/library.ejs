@@ -6,9 +6,8 @@
 					<table class="table" id="empty-parent">
 						<thead>
 							<tr>
-								<th style="width:90px">ID</th >
-								<th class="no-sort" style="width:150px"></th>
-								<th>Game</th>
+								<th class="no-sort" style="width:200px">Logo</th>
+								<th>Info</th>
 								<th style="width:147px"></th>
 							</tr>
 						</thead>
@@ -19,14 +18,9 @@
 						</style>
 						<tbody>
 							<% for (var i=0; i < ownedGames.length; i++) { %>
-								<tr>
-									<td>
-										<a>
-											<%= ownedGames[i].steamId %>
-										</a>
-									</td>
-									<td>
-										<img width="126px" src=<%= gameLogos[i] %>>
+								<tr height="75px">
+									<td style="padding: 0">
+										<img width="100%" src=<%= gameLogos[i] %>>
 									</td>
 									<td>
 										<b class="muted">
@@ -34,9 +28,7 @@
 										</b>
 										<div>
 											<i>
-												<% for (var j=0; j < ownedGames[i].genres.length; j++) { %>
-													<%= ownedGames[i].genres[j] %><% if(j+1 == ownedGames[i].genres.length) continue %>,
-												<% } %>
+												Added on <%= gamesLibInfo[i].addedAt %>
 											</i>
 										</div>
 									</td>

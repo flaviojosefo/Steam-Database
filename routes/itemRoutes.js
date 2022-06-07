@@ -112,16 +112,18 @@ router.get('/library', isAuth, async (req, res) => {
 	// Fetch games info from store (by steamId)
 	let gamesInfo = await Game.find({ 'steamId': { $in: gamesId } });
 	
+	// Get the positions of each Id on the 'gamesId' array
 	const itemPositions = {};
 	for (const [index, steamId] of gamesId.entries()) {
 		itemPositions[steamId] = index;
 	}
 	
+	// Sort the info array to correspond to the gamesId array
 	gamesInfo.sort((a, b) => itemPositions[a.steamId] - itemPositions[b.steamId]);
 	//console.log(gamesInfo);
 	
 	// Get a logo for each game, searching by the game's steamId
-	// Why not use forEach here aswell? Because of 'await'
+	// Why not use forEach here aswell? Because forEach doesn't allow 'await'
 	let logos = [];
 	for (let i = 0; i < userGames.length; i++) {
 		logos.push(await fetchLogo(userGames[i].steamId))
@@ -129,6 +131,7 @@ router.get('/library', isAuth, async (req, res) => {
 	
 	res.render('library', {
 		user: req.user,
+		gamesLibInfo: userGames,
 		ownedGames: gamesInfo,
 		gameLogos: logos
 	});
