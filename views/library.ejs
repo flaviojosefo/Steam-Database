@@ -33,9 +33,11 @@
 										</div>
 									</td>
 									<td align="center">
-										<button style="height: 36px" type="button" class="btn btn-danger btn-sm" onclick="1">
-											<i class="fa fa-trash" aria-hidden="true"></i> Remove Game
-										</button>
+										<form method="POST" action="/games/library">
+											<button style="height: 36px" type="submit" class="btn btn-danger btn-sm" name=<%= gamesLibInfo[i].steamId %>>
+												<i class="fa fa-trash" aria-hidden="true"></i> Remove Game
+											</button>
+										</form>
 									</td>
 								</tr>
 							<% } %>
@@ -49,5 +51,13 @@
 			const empty = document.getElementById('empty-parent');
 			empty.insertAdjacentHTML('afterend', '<center><h4><i>It seems you have no games...yet! Get some from the <a href="/games/store" class="link-primary">Store!</a></i></h4></center>');
 		<% } %>
+	</script>
+	<script>
+		function sendDelete(event){
+			event.preventDefault();
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("DELETE", "/games/library", true);
+			xhttp.send();
+		}
 	</script>
 <%- include('foot'); -%>

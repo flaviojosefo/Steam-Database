@@ -137,6 +137,13 @@ router.get('/library', isAuth, async (req, res) => {
 	});
 });
 
+router.post('/library', (req, res) => {
+	
+	console.log(Object.keys(req.body)[0]);
+	
+	res.redirect(req.originalUrl);
+});
+
 /*router.get('store/:id', (req, res) => {
 	//const externalInfo = await getSteamInfo('1085660');
 	//console.log(externalInfo.success);
@@ -169,7 +176,7 @@ router.post('/add', async (req, res) => {
         });
 	}
 	
-	res.redirect(req.originalUrl);
+	res.redirect('/games/store');
 });
 
 async function getSteamInfo(appId) {
@@ -207,12 +214,10 @@ async function fetchLogo(appId) {
 	// Check if URL returns empty (e.g.: 404)
 	if (response.ok) {
 		//console.log('logo found!');
-		
 		// Return an external logo
 		return logoUrl;
 	} else {
 		//console.log('logo NOT found!');
-		
 		// Return a default logo in the server
 		return "/images/applogo.svg";
 	}
