@@ -201,8 +201,11 @@ async function fetchLogo(appId) {
 	// Default URL for a game's logo
 	const logoUrl = "https://cdn.akamai.steamstatic.com/steam/apps/" + appId + "/capsule_231x87.jpg";
 	
+	// Fetch logo URL
+	const response = await fetch(logoUrl);
+	
 	// Check if URL returns empty (e.g.: 404)
-	if (await urlExists(logoUrl)) {
+	if (response.ok) {
 		//console.log('logo found!');
 		
 		// Return an external logo
@@ -214,9 +217,6 @@ async function fetchLogo(appId) {
 		return "/images/applogo.svg";
 	}
 }
-
-// Check a URL's 'ok' status
-async function urlExists(url) { return (await fetch(url)).ok }
 
 function formIsValid(body) {
 	if(body.title.trim().length == 0) return false;
