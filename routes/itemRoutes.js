@@ -2,6 +2,7 @@ const router = require('express').Router();
 const fetch = require('node-fetch');
 const url = require('url');
 const { isAuth } = require('../services/middleware');
+const { hasLib } = require('../services/libMiddleware');
 const Game = require('../models/Game');
 const Library = require('../models/Library');
 
@@ -20,7 +21,7 @@ router.get('/store', async (req, res) => {
 	// Get a logo for each game, searching by the game's Id
 	let logos = [];
 	for (let i = 0; i < storeGames.length; i++) {
-		logos.push(await fetchLogo(storeGames[i].steamId))
+		logos.push(await fetchLogo(storeGames[i].steamId));
 	}
 	
 	// Array of games owned by user
@@ -47,28 +48,10 @@ router.get('/store', async (req, res) => {
 	});
 });
 
-router.get('/library', isAuth, async (req, res) => {
+router.get('/library', isAuth, hasLib, async (req, res) => {
 	
-	// Try to find a library from the logged user
+	// Fetch the user's library
 	let userLib = await Library.findOne({ ownderId: req.user.googleId });
-	
-	try {
-		// Check if user does NOT have a library
-		if (!userLib) {
-			// If not, create a new (empty) one
-			userLib = await new Library({
-				ownderId: req.user.googleId,
-				games: undefined
-			}).save();
-			console.log('Created library for user ' + req.user.name, userLib);
-		}
-	} catch (err) {
-		console.error(err);
-		res.render('error', {
-			message_tag: 'Failed creating a Library'
-		});
-		return;
-	}
 	
 	// Check if we get data on a query
 	if (req.query.steamId) {

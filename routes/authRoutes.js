@@ -51,6 +51,7 @@ module.exports = app => {
 
     app.get('/logout', (req, res) => {
         req.logout();
+		delete req.session.lib;
         res.redirect('/status');
         console.log("User Authenticated:", req.isAuthenticated());
     });
