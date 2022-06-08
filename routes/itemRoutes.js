@@ -75,7 +75,7 @@ router.get('/library', isAuth, async (req, res) => {
 		// Check if the game is already owned by the user
 		let alreadyOwned = false;
 		userLib.games.forEach(function(currentValue) { if (currentValue.steamId == req.query.steamId) { alreadyOwned = true; } });
-		console.log('Game already owned: ' + alreadyOwned);
+		console.log('Game ' + req.query.steamId + ' already owned: ' + alreadyOwned);
 		
 		try {
 			// Only add a game to the DB if the user doesn't own it
