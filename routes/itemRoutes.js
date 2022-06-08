@@ -144,7 +144,7 @@ router.post('/library', async (req, res) => {
 	try {
 		// Try to find a library from the current user
 		// and remove (pull) a game with the specified steamId
-		await Library.findOneAndUpdate(
+		await Library.updateOne(
 			{ ownderId: req.user.googleId }, 
 			{ $pull: { games: { steamId: req.body.removeId } } }
 		);
