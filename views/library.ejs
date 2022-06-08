@@ -1,50 +1,51 @@
 <%- include('head'); -%>
 	<main>
 		<div class="jumbotron">
-			<p class="lead"><i class="fa fa-gamepad" aria-hidden="true">
-				</i> <%= user.name %>'s Library</p>
-				<div class="row-fluid">
-					<table class="table" id="empty-parent">
-						<thead>
-							<tr>
-								<th class="no-sort" style="width:200px">Logo</th>
-								<th>Info</th>
-								<th style="width:147px"></th>
+			<p class="lead">
+				<i class="fa fa-gamepad" aria-hidden="true"></i> <%= user.name %>'s Library
+			</p>
+			<div class="row-fluid">
+				<table class="table" id="empty-parent">
+					<thead>
+						<tr>
+							<th class="no-sort" style="width:200px">Logo</th>
+							<th>Info</th>
+							<th style="width:147px"></th>
+						</tr>
+					</thead>
+					<style>
+						td {
+							vertical-align: middle !important;
+						}
+					</style>
+					<tbody>
+						<% for (var i=0; i < ownedGames.length; i++) { %>
+							<tr height="75px">
+								<td style="padding: 0">
+									<img width="100%" src=<%= gameLogos[i] %>>
+								</td>
+								<td>
+									<b class="muted">
+										<%= ownedGames[i].title %>
+									</b>
+									<div>
+										<i>
+											Added on <%= gamesLibInfo[i].addedAt %>
+										</i>
+									</div>
+								</td>
+								<td align="center">
+									<form method="POST" action="/games/library">
+										<button style="height: 36px" type="submit" class="btn btn-danger btn-sm" name="removeId" value=<%= gamesLibInfo[i].steamId %>>
+											<i class="fa fa-trash" aria-hidden="true"></i> Remove Game
+										</button>
+									</form>
+								</td>
 							</tr>
-						</thead>
-						<style>
-							td {
-								vertical-align: middle !important;
-							}
-						</style>
-						<tbody>
-							<% for (var i=0; i < ownedGames.length; i++) { %>
-								<tr height="75px">
-									<td style="padding: 0">
-										<img width="100%" src=<%= gameLogos[i] %>>
-									</td>
-									<td>
-										<b class="muted">
-											<%= ownedGames[i].title %>
-										</b>
-										<div>
-											<i>
-												Added on <%= gamesLibInfo[i].addedAt %>
-											</i>
-										</div>
-									</td>
-									<td align="center">
-										<form method="POST" action="/games/library">
-											<button style="height: 36px" type="submit" class="btn btn-danger btn-sm" name="removeId" value=<%= gamesLibInfo[i].steamId %>>
-												<i class="fa fa-trash" aria-hidden="true"></i> Remove Game
-											</button>
-										</form>
-									</td>
-								</tr>
-							<% } %>
-						</tbody>
-					</table>
-				</div>
+						<% } %>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</main>
 	<script>
