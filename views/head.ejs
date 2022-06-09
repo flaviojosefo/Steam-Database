@@ -7,23 +7,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Steam Database</title>
 
-  <!-- CSS (load bootstrap from a CDN) -->
+  <!-- CSS (load bootstrap, fontawesome and darktheme from a CDN) -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <!-- load fontawesome -->
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap-darkmode@0.9.1/css/darktheme.css"/>
   <style>
     body {
       padding-top: 50px;
     }
+	
+	.jumbo-override {
+		padding-top: 40px;
+		padding-bottom: 32px;
+		border-top-left-radius: 0; 
+		border-top-right-radius: 0;
+	}
   </style>
   <!-- views/partials/head.ejs -->
 </head>
 
 <body class="container"></body>
 
-<header>
+<header class="border border-left-0 border-top-0 border-right-0">
   <!-- views/partials/header.ejs -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;">
     <a class="navbar-brand" href="#">Google Passport Authentication</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,3 +56,11 @@
   integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
 <body>
+<!-- Load the darkmode script as first thing in body -->
+<script src="https://unpkg.com/bootstrap-darkmode@0.9.1/bundles/bootstrap-darkmode.umd.js"></script>
+<!-- Initialize darkmode config and load theme -->
+<script>
+	const BootstrapDarkmode = window['bootstrap-darkmode'];
+	const themeConfig = new BootstrapDarkmode.ThemeConfig();
+	themeConfig.initTheme();
+</script>
