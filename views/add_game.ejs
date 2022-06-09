@@ -3,7 +3,7 @@
 		<div class="jumbotron">
 			<p class="lead"><i class="fa fa-plus"></i> Add a Game to the Store</p>
 			<hr class="my-4">
-				<form method="POST" action="/games/add">
+				<form name="gameForm" method="POST" action="/games/add" onsubmit="return validateForm()" onreset="resetGenres()">
 					<p>
 						<label for="title">Game Title:</label>
 						<input type="text" name="title">
@@ -24,13 +24,14 @@
 						<input type="text" name="developer" style="margin-left: 3px">
 					</p>
 					<p>
-						<input type="submit" class="btn btn-primary" value="Add Game">
+						<input style="margin-right: 5px" type="submit" class="btn btn-success" value="Add Game">
+						<input type="reset" class="btn btn-danger" value="Reset">
 					</p>
 				</form>
 		</div>
 	</main>
 	<script type="text/javascript">
-		var parent = document.getElementById("list");
+		var selectParent = document.getElementById("list");
 	
 		//Create array of options to be added
 		var options = ["Action","Platform","Shooter","Survival","Adventure","Horror","MMO","RPG","Simulation","Strategy"];
@@ -39,13 +40,14 @@
 		const maxOptions = 5;
 		
 		function addGenre() {
+			// Leave function if maxOptions is reached
 			if (currentOptions >= maxOptions) return;
 		
 			//Create and append select list
 			var selectList = document.createElement("select");
 			selectList.setAttribute("name", "genres");
 			selectList.setAttribute("style", "height: 30px; margin-right: 4px;");
-			parent.appendChild(selectList);
+			selectParent.appendChild(selectList);
 			
 			//Create and append the options
 			for (let i = 0; i < options.length; i++) {
@@ -54,6 +56,56 @@
 			}
 			
 			currentOptions++;
+		}
+		
+		// Reset genre boxes
+		function resetGenres() {
+			// Leave function if no more than 1 option exists
+			if (currentOptions <= 1) return;
+		
+			// Reset the counter
+			currentOptions = 0;
+			
+			// Remove all 'select' children
+			selectParent.replaceChildren();
+			
+			// Re-add the default box
+			addGenre();
+		}
+		
+		function validateForm() {
+			// Fetch the form
+			const form = document.forms["gameForm"];
+			
+			// Fetch items of interest and trim empty spaces
+			const title = form["title"].value.trim();
+			const steamId = form["steamId"].value.trim();
+			const developer = form["developer"].value.trim();
+			
+			// Message to be displayed
+			let alertMessage = "";
+			
+			// Bool to return
+			let formValid = true;
+			
+			if (title.length == 0) {
+				alertMessage += "\nInvalid Game Title!";
+				formValid = false;
+			}
+			
+			if (steamId.length == 0) {
+				alertMessage += "\nInvalid Steam ID!";
+				formValid = false;
+			}
+			
+			if (developer.length == 0) {
+				alertMessage += "\nInvalid Developer!";
+				formValid = false;
+			}
+			
+			if (!formValid) alert(alertMessage);
+			
+			return formValid;
 		}
 		
 		// Always create one on page load
