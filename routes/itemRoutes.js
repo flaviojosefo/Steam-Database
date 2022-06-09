@@ -6,6 +6,11 @@ const { hasLib } = require('../services/libMiddleware');
 const Game = require('../models/Game');
 const Library = require('../models/Library');
 
+router.get('/', (req, res) => {
+	// Redirect to the Store
+	res.redirect('/games/store');
+});
+
 router.get('/add', (req, res) => {
 	res.render('add_game', {
 		user: req.user
