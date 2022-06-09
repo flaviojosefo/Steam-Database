@@ -218,12 +218,6 @@ async function fetchLogo(appId) {
 	}
 }
 
-function formIsValid(body) {
-	if(body.title.trim().length == 0) return false;
-	
-	return true;
-}
-
 function getCurrentUser(req) {
 	if (req.isAuthenticated()) {
 		return [req.user.name, req.user.googleId];
