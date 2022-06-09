@@ -144,10 +144,14 @@ router.post('/library', async (req, res) => {
 	res.redirect(req.originalUrl);
 });
 
-/*router.get('store/:id', (req, res) => {
+router.get('/store/:id', (req, res) => {
+	
+	console.log(req.params.id);
+	res.redirect('/games/store');
+	
 	//const externalInfo = await getSteamInfo('1085660');
 	//console.log(externalInfo.success);
-}*/
+});
 
 router.post('/add', async (req, res) => {
 	//console.log(req.body);

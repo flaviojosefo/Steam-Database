@@ -18,7 +18,7 @@
 				}
 			</style>
 			<p class="lead">
-				<i class="fa fa-steam" aria-hidden="true"></i> Search the Store for your favourite game!
+				<i class="fa fa-steam-square" aria-hidden="true"></i> Search the Store for your favourite game!
 				<span class="clearfix">
 					<span style="width: 147px; text-align: center; float: right">
 						<button type="button" class="btn btn-success btn-circle" onclick="location.href='/games/add';">
@@ -46,16 +46,20 @@
 						<% for (var i=0; i < gamesList.length; i++) { %>
 							<tr height="75px">
 								<td>
-									<a>
+									<a href="/games/store/<%= gamesList[i].steamId %>" style="color: inherit">
 										<%= gamesList[i].steamId %>
 									</a>
 								</td>
 								<td>
-									<img width="126px" src=<%= gameLogos[i] %>>
+									<a href="/games/store/<%= gamesList[i].steamId %>">
+										<img width="126px" src=<%= gameLogos[i] %>>
+									</a>
 								</td>
 								<td>
 									<b class="muted">
-										<%= gamesList[i].title %>
+										<a href="/games/store/<%= gamesList[i].steamId %>" style="color: inherit">
+											<%= gamesList[i].title %>
+										</a>
 									</b>
 									<div>
 										<i>
