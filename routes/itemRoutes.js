@@ -101,6 +101,7 @@ router.get('/library', isAuth, hasLib, async (req, res) => {
 	let gamesInfo = await Game.find({ 'steamId': { $in: gamesId } });
 	
 	// Get the positions of each Id on the 'gamesId' array
+	// This accelerates the sort
 	const itemPositions = {};
 	for (const [index, steamId] of gamesId.entries()) {
 		itemPositions[steamId] = index;
