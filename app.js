@@ -46,7 +46,7 @@ app.use(passport.session());
 
 // App routes
 app.use('/', require('./routes/authRoutes'));
-app.use('/games', require('./routes/itemRoutes'));
+app.use('/games', require('./routes/gameRoutes'));
 
 // Create the server according to environment
 createServer(app);

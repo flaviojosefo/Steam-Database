@@ -2,7 +2,6 @@ const router = require('express').Router();
 const fetch = require('node-fetch');
 const url = require('url');
 const { isAuth } = require('../services/middleware');
-const { hasLib } = require('../services/libMiddleware');
 const Game = require('../models/Game');
 const Library = require('../models/Library');
 
