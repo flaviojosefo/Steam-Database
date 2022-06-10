@@ -48,8 +48,8 @@ router.get('/error', (req, res) => {
     });
 });
 
-router.get('/logout', (req, res) => {
-    req.logout();
+router.get('/logout', async (req, res) => {
+    await req.logout();
     res.redirect('/status');
     console.log("User Authenticated:", req.isAuthenticated());
 });
