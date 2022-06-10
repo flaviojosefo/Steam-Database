@@ -18,7 +18,7 @@ router.get('/add', (req, res) => {
 });
 
 router.get('/store', async (req, res) => {
-	
+	// Encapsulate code in try/catch to prevent await related errors
 	try {
 		// Get games on store DB and reverse order
 		let storeGames = await Game.find();
@@ -57,7 +57,7 @@ router.get('/store', async (req, res) => {
 		console.error(err);
 		// Render an error (client-side)
 		res.render('error', {
-			message_tag: 'Library Error'
+			message_tag: 'Store Error'
 		});
 	}
 	
@@ -152,9 +152,10 @@ router.get('/library', isAuth, async (req, res) => {
 });
 
 router.post('/library', async (req, res) => {
-	
+	// Print which game was removed (by steamId) from the current user's library
 	console.log('Removed game ' + req.body.removeId + ' from ' + req.user.name + '\'s Library');
 	
+	// Encapsulate code in try/catch to prevent await related errors
 	try {
 		// Try to find a library from the current user
 		// and remove (pull) a game with the specified steamId
@@ -200,7 +201,7 @@ router.get('/store/:id', (req, res) => {
 
 router.post('/add', async (req, res) => {
 	
-	// Try saving the game to the DB
+	// Encapsulate code in try/catch to prevent await related errors
 	try {
 		// Get a game with the declared steamId
 		let gameToAdd = await Game.findOne({ steamId: req.body.steamId });
