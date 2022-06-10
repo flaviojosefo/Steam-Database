@@ -44,17 +44,24 @@ passport.use(
             // console.log('User profile:', profile._json);
             // console.log('OAuth2 params:', params);
 			
+			// Try/Catch block
 			try {
+				// Fetch a user with the specified googleId from the DB
 				let thisUser = await User.findOne({ googleId: profile.id });
+				
+				// A message to print on the console
+				// with the user that was found/created
 				let logMessage = '';
+				
+				// Check if a user was found
 				if (thisUser) {
-					// Update user's access token and expiration date and save it to the DB
+					// If it was, update user's access token and expiration date and save it to the DB
 					logMessage = 'Found existing user:';
 					thisUser.accessToken = accessToken;
 					thisUser.expiryDate = getExpiryDate(params.expires_in);
 					await thisUser.save();
 				} else {
-					// Create a new user and add it to the DB
+					// If it wasn't, create a new user and add it to the DB
 					thisUser = await new User(
 						{
 							googleId: profile.id,
@@ -67,6 +74,7 @@ passport.use(
 						}).save();
 					logMessage = 'Registered new user:';
 				}
+				// Print the user on the console
 				console.log(logMessage, thisUser);
 				done(null, thisUser);
 			} catch (err) {
