@@ -198,19 +198,30 @@ router.get('/library/:id', (req, res) => {
 	//console.log(externalInfo.success);
 });
 
-router.get('/store/:id', (req, res) => {
-	
-	console.log(req.params.id);
-	res.redirect('/games/store');
+router.get('/store/:id', async (req, res) => {
+	// Encapsulate code in try/catch to prevent await related errors
+	try {
+		// Get extra info about a game from the Steam API
+		let externalInfo = await getSteamInfo(req.params.id);
+		externalInfo = externalInfo[req.params.id];
+		console.log(externalInfo);
+		
+		res.redirect('/games/store');
+	} catch (err) {
+		// Show the error on the (server's) console
+		console.error(err);
+		// Render an error (client-side)
+		res.render('error', {
+			message_tag: 'Could not load page for game with id ' + req.params.id,
+			status: req
+		});
+	}
 	
 	// Display game info
-	
-	//const externalInfo = await getSteamInfo('1085660');
 	//console.log(externalInfo.success);
 });
 
 router.post('/add', async (req, res) => {
-	
 	// Encapsulate code in try/catch to prevent await related errors
 	try {
 		// Get a game with the declared steamId
@@ -252,27 +263,22 @@ router.post('/add', async (req, res) => {
 	}
 });
 
+// Fetch information about a game from the Steam API
 async function getSteamInfo(appId) {
-	
+	// Get the game's url on the API by steamId (appId)
 	const steamAppUrl = 'https://store.steampowered.com/api/appdetails?appids=' + appId;
-	//console.log(steamAppUrl);
 	
-	// Get JSON from specified url
-	const getJSON = async url => {
-		const response = await fetch(url);
-		if(!response.ok) // check if response worked (no 404 errors etc...)
+	// Fetch a url's response
+	const response = await fetch(steamAppUrl);
+	
+	// If response is not good, throw an error
+	// This should only happen if the API is Down
+	if(!response.ok) {
 		throw new Error(response.statusText);
-
-		const data = response.json(); // get JSON from the response
-		return data; // returns a promise, which resolves to this data value
 	}
 	
-	return await getJSON(steamAppUrl).then(data => {
-		//console.log(data[parseInt(appId)]);
-		return data[parseInt(appId)];
-	}).catch (err => {
-		console.error(err);
-	});
+	// If response is good, return the page's JSON file
+	return response.json();
 }
 
 // Return a logo image as a URL
