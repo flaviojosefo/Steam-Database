@@ -5,11 +5,13 @@ const { isAuth } = require('../services/middleware');
 const Game = require('../models/Game');
 const Library = require('../models/Library');
 
+// Redirect user from main 'games' page to the store
 router.get('/', (req, res) => {
 	// Redirect to the Store
 	res.redirect('/games/store');
 });
 
+// Render the page where games are added to the DB
 router.get('/add', (req, res) => {
 	// Display the 'Add Game' page
 	res.render('add_game', {
@@ -17,6 +19,7 @@ router.get('/add', (req, res) => {
 	});
 });
 
+// Render the store page
 router.get('/store', async (req, res) => {
 	// Encapsulate code in try/catch to prevent await related errors
 	try {
@@ -64,6 +67,7 @@ router.get('/store', async (req, res) => {
 	
 });
 
+// Render the library page
 router.get('/library', isAuth, async (req, res) => {
 	// Encapsulate code in try/catch to prevent await related errors
 	try {
@@ -94,12 +98,15 @@ router.get('/library', isAuth, async (req, res) => {
 					steamId: req.query.steamId, 
 					addedAt: getDate().format(new Date()) 
 				});
+				// Update the user's library
 				await userLib.save();
 				console.log('Added game ' + req.query.steamId + ' to ' + req.user.name + '\'s Library');
 			}
 			
 			// Redirect the user to the normal library URL
 			res.redirect(url.parse(req.originalUrl).pathname);
+			
+			// Stop route execution
 			return;
 		}
 		
@@ -124,7 +131,6 @@ router.get('/library', isAuth, async (req, res) => {
 		
 		// Sort the info array to correspond to the gamesId array
 		gamesInfo.sort((a, b) => itemPositions[a.steamId] - itemPositions[b.steamId]);
-		//console.log(gamesInfo);
 		
 		// Get a logo for each game, searching by the game's steamId
 		// Why not use a forEach? Because forEach doesn't allow 'await'
@@ -151,6 +157,7 @@ router.get('/library', isAuth, async (req, res) => {
 	}
 });
 
+// Post (remove) a game from the user's library
 router.post('/library', async (req, res) => {
 	// Print which game was removed (by steamId) from the current user's library
 	console.log('Removed game ' + req.body.removeId + ' from ' + req.user.name + '\'s Library');
