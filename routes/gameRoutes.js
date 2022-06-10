@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 router.get('/add', (req, res) => {
 	// Display the 'Add Game' page
 	res.render('add_game', {
-		user: req.user
+		status: req
 	});
 });
 
@@ -50,17 +50,18 @@ router.get('/store', async (req, res) => {
 		
 		// Send relevant info to the 'ejs' file
 		res.render('store', {
-			user: req.user,
 			gamesList: storeGames,
 			gameLogos: logos,
-			ownedIds: ownedGames
+			ownedIds: ownedGames,
+			status: req
 		});
 	} catch (err) {
 		// Show the error on the (server's) console
 		console.error(err);
 		// Render an error (client-side)
 		res.render('error', {
-			message_tag: 'Store Error'
+			message_tag: 'Store Error',
+			status: req
 		});
 	}
 	
@@ -141,10 +142,10 @@ router.get('/library', isAuth, async (req, res) => {
 		
 		// Render the user's library
 		res.render('library', {
-			user: req.user,
 			gamesLibInfo: userGames,
 			ownedGames: gamesInfo,
-			gameLogos: logos
+			gameLogos: logos,
+			status: req
 		});
 		
 	} catch (err) {
@@ -152,7 +153,8 @@ router.get('/library', isAuth, async (req, res) => {
 		console.error(err);
 		// Render an error (client-side)
 		res.render('error', {
-			message_tag: 'Library Error'
+			message_tag: 'Library Error',
+			status: req
 		});
 	}
 });
@@ -178,7 +180,8 @@ router.post('/library', async (req, res) => {
 		console.error(err);
 		// Render an error (client-side)
 		res.render('error', {
-			message_tag: 'Could not remove game with id ' + req.body.removeId
+			message_tag: 'Could not remove game with id ' + req.body.removeId,
+			status: req
 		});
 	}
 });
@@ -243,7 +246,8 @@ router.post('/add', async (req, res) => {
 		console.error(err);
 		// Render an error (client-side)
 		res.render('error', {
-            message_tag: 'Failed creating a new Game'
+            message_tag: 'Failed creating a new Game',
+			status: req
         });
 	}
 });

@@ -31,7 +31,10 @@
 <header class="border border-left-0 border-top-0 border-right-0">
   <!-- views/partials/header.ejs -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;">
-    <a class="navbar-brand" href="#">Google Passport Authentication</a>
+    <a class="navbar-brand" href="#">
+		<i class="fa fa-steam" aria-hidden="true"></i>
+		Steam Database
+	</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -39,13 +42,19 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <div class="navbar-nav">
         <a class="nav-item nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-        <a class="nav-item nav-link" href="/login">Login</a>
         <a class="nav-item nav-link" href="/status">Status</a>
         <a class="nav-item nav-link" href="/resource">Resource</a>
         <a class="nav-item nav-link" href="/games/store">Store</a>
         <a class="nav-item nav-link" href="/games/library">Library</a>
-        <a class="nav-item nav-link" href="/logout">Logout</a>
       </div>
+	  <div class="navbar-nav ml-auto">
+		<% if (status.isAuthenticated()) { %>
+		   <a class="nav-item nav-link">Logged as <b><%= status.user.name %></b></a>
+		   <a class="nav-item nav-link" href="/logout">Logout</a>
+		<% } else { %>
+           <a class="nav-item nav-link" href="/login">Login</a>
+		<% } %>
+	  </div>
     </div>
   </nav>
   <!-- views/partials/header.ejs -->

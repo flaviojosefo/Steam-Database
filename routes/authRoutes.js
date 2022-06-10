@@ -13,6 +13,7 @@ router.get('/', (req, res) => {
 		res.render('index', {
 			date_tag: date,
 			message_tag: 'Access your Google Account',
+			status: req
 		});
 	}
 });
@@ -26,13 +27,15 @@ router.get('/success', (req, res) => {
     console.log('Session expires in:', req.session.cookie.maxAge / 1000);
     res.render('success', {
         message: 'Authorization Successful!',
-        user: req.user
+        user: req.user,
+		status: req
     });
 });
 
 router.get('/resource', isAuth, (req, res, next) => {
     res.render('resource', {
-        authenticated: req.isAuthenticated()
+        authenticated: req.isAuthenticated(),
+		status: req
     });
 });
 
@@ -44,7 +47,8 @@ router.get('/status', (req, res, next) => {
 
 router.get('/error', (req, res) => {
     res.render('error', {
-        message_tag: 'Authentication Error'
+        message_tag: 'Authentication Error',
+		status: req
     });
 });
 
