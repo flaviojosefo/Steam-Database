@@ -24,7 +24,7 @@ router.get('/add', (req, res) => {
 router.get('/store', async (req, res) => {
 	// Encapsulate code in try/catch to prevent await related errors
 	try {
-		// Get games on store DB and reverse order
+		// Get games on games collection and reverse order
 		let storeGames = await Game.find();
 		storeGames = storeGames.reverse();
 		
@@ -121,7 +121,7 @@ router.get('/library', isAuth, async (req, res) => {
 		userGames.forEach(function(currentValue) { gamesId.push(currentValue.steamId); });
 		//console.log(gamesId);
 		
-		// Fetch games info from store (by steamId)
+		// Fetch games info from games collection (by steamId)
 		let gamesInfo = await Game.find({ 'steamId': { $in: gamesId } });
 		
 		// Get the positions of each Id on the 'gamesId' array
@@ -137,8 +137,8 @@ router.get('/library', isAuth, async (req, res) => {
 		// Get a logo for each game, searching by the game's steamId
 		// Why not use a forEach? Because forEach doesn't allow 'await'
 		let logos = [];
-		for (let i = 0; i < userGames.length; i++) {
-			logos.push(await fetchLogo(userGames[i].steamId))
+		for (let i = 0; i < gamesInfo.length; i++) {
+			logos.push(await fetchLogo(gamesInfo[i].steamId))
 		}
 		
 		// Render the user's library
@@ -202,12 +202,31 @@ router.get('/library/:id', (req, res) => {
 router.get('/store/:id', async (req, res) => {
 	// Encapsulate code in try/catch to prevent await related errors
 	try {
-		// Get extra info about a game from the Steam API
-		let externalInfo = await getSteamInfo(req.params.id);
-		externalInfo = externalInfo[req.params.id];
-		console.log(externalInfo.success);
+		// Get game info from MongoDB
+		// const game = await Game.findOne({ steamId: req.body.steamId });
 		
-		res.redirect('/games/store');
+		// Get extra info about a game from the Steam API
+		let steamInfo = await getSteamInfo(req.params.id);
+		steamInfo = steamInfo[req.params.id];
+		//console.log(externalInfo.success);
+		
+		if (steamInfo.success) {
+			res.render('display_game', {
+				title: steamInfo.data.name,
+				steamId: req.params.id,
+				developer: steamInfo.data.developers[0],
+				addedBy: 'Person who added',
+				status: req
+			});
+		} else {
+			res.render('display_game', {
+				title: 'No title found',
+				steamId: req.params.id,
+				developer: 'No dev',
+				addedBy: 'No date',
+				status: req
+			});
+		}
 	} catch (err) {
 		// Show the error on the (server's) console
 		console.error(err);
