@@ -18,8 +18,11 @@
 					<p>
 						<label for="genres">Genres:</label>
 						<span id="list" style="display: inline-block; height: 30px; margin-left: 26px"></span>
-						<button type="button" onclick="addGenre()" class="btn btn-light btn-sm" style="height: 30px; margin-bottom: 5px">
+						<button id="genreButton" type="button" onclick="addGenre()" class="btn btn-success btn-sm" style="height: 30px; margin-bottom: 5px">
 							<i class="fa fa-plus-square" aria-hidden="true"></i> Add Genre
+						</button>
+						<button type="button" onclick="resetGenres()" class="btn btn-danger btn-sm" style="height: 30px; margin-bottom: 5px">
+							<i class="fa fa-undo" aria-hidden="true"></i> Genres
 						</button>
 					</p>
 					<p>
@@ -27,8 +30,8 @@
 						<input type="text" name="developer" style="margin-left: 3px">
 					</p>
 					<p style="margin-left: 83px">
-						<input style="margin-right: 5px" type="submit" class="btn btn-success" value="Add Game">
-						<input type="reset" class="btn btn-danger" value="Reset">
+						<input style="margin-right: 5px; font-weight: bold;" type="submit" class="btn btn-success" value="Add Game">
+						<input style="font-weight: bold;" type="reset" class="btn btn-danger" value="Reset">
 					</p>
 				</form>
 		</div>
@@ -46,8 +49,10 @@
 		
 		// Add a genre select box
 		function addGenre() {
-			// Leave function if maxOptions is reached
-			if (currentOptions >= maxOptions) return;
+			// Hide 'Add Genre' button if maxOptions is reached
+			if (currentOptions == maxOptions - 1) {
+				$('#genreButton').hide();
+			}
 		
 			//Create and append select list
 			var selectList = document.createElement("select");
@@ -83,6 +88,9 @@
 			
 			// Re-add the default box
 			addGenre();
+			
+			// Display 'Add Genre' button
+			$('#genreButton').show();
 		}
 		
 		// Validate all form fields
