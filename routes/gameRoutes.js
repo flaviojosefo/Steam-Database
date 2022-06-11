@@ -203,27 +203,29 @@ router.get('/store/:id', async (req, res) => {
 	// Encapsulate code in try/catch to prevent await related errors
 	try {
 		// Get game info from MongoDB
-		// const game = await Game.findOne({ steamId: req.body.steamId });
+		const gameToDisplay = await Game.findOne({ steamId: req.params.id });
 		
 		// Get extra info about a game from the Steam API
 		let steamInfo = await getSteamInfo(req.params.id);
 		steamInfo = steamInfo[req.params.id];
-		//console.log(externalInfo.success);
 		
+		// Check if game exists on the API
 		if (steamInfo.success) {
+			// Reduce the info on the JSON to only the values we want
+			const interestKeys = ['short_description', 'header_image', 'metacritic', 'release_date' ];
+			Object.keys(steamInfo.data).forEach((key) => interestKeys.includes(key) || delete steamInfo.data[key]);
+			
+			// Display the game's page with all the available info
 			res.render('display_game', {
-				title: steamInfo.data.name,
-				steamId: req.params.id,
-				developer: steamInfo.data.developers[0],
-				addedBy: 'Person who added',
+				game: gameToDisplay,
+				steamInfo: steamInfo.data,
 				status: req
 			});
 		} else {
+			// Display the game's page with just the DB's info
 			res.render('display_game', {
-				title: 'No title found',
-				steamId: req.params.id,
-				developer: 'No dev',
-				addedBy: 'No date',
+				game: gameToDisplay,
+				steamInfo: undefined,
 				status: req
 			});
 		}

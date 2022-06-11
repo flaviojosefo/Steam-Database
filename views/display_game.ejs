@@ -2,9 +2,15 @@
 	<main>
 		<div class="jumbotron jumbo-override">
 			<p class="lead">
-				<i class="fa fa-gamepad" aria-hidden="true"></i> Game Page
+				<i class="fa fa-gamepad" aria-hidden="true"></i> <%= game.title %>
 			</p>
+			<hr class="my-4">
 			<div class="row-fluid">
+				<% if (steamInfo) { %>
+					<%= steamInfo.short_description %>
+				<% } else { %>
+					<i>No description found!</i>
+				<% } %>
 			</div>
 		</div>
 	</main>
