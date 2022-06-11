@@ -11,6 +11,9 @@
 					<p>
 						<label for="steamId">Steam ID:</label>
 						<input type="text" name="steamId" style="margin-left: 12px">
+						<i id="message" style="color: #dc3545">
+							<b><%= gameFoundMessage %></b>
+						</i>
 					</p>
 					<p>
 						<label for="genres">Genres:</label>
@@ -31,14 +34,17 @@
 		</div>
 	</main>
 	<script type="text/javascript">
+		// The parent element to all selects
 		var selectParent = document.getElementById("list");
 	
 		//Create array of options to be added
 		var options = ["Action","Platform","Shooter","Survival","Adventure","Horror","MMO","RPG","Simulation","Strategy"];
 		
+		// Controllers for box spawns
 		var currentOptions = 0;
 		const maxOptions = 5;
 		
+		// Add a genre select box
 		function addGenre() {
 			// Leave function if maxOptions is reached
 			if (currentOptions >= maxOptions) return;
@@ -58,6 +64,12 @@
 			currentOptions++;
 		}
 		
+		function fadeMessage(delayTime) {
+			setTimeout(function() {
+				$('#message').hide();
+			}, delayTime);
+		}
+		
 		// Reset genre boxes
 		function resetGenres() {
 			// Leave function if no more than 1 option exists
@@ -73,6 +85,7 @@
 			addGenre();
 		}
 		
+		// Validate all form fields
 		function validateForm() {
 			// Fetch the form
 			const form = document.forms["gameForm"];
@@ -108,7 +121,10 @@
 			return formValid;
 		}
 		
-		// Always create one on page load
+		// Always create one select on page load
 		addGenre();
+		
+		// Fade the message after some time
+		fadeMessage(5000);
 	</script>
 <%- include('foot'); -%>

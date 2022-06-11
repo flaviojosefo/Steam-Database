@@ -15,6 +15,7 @@ router.get('/', (req, res) => {
 router.get('/add', (req, res) => {
 	// Display the 'Add Game' page
 	res.render('add_game', {
+		gameFoundMessage: '',
 		status: req
 	});
 });
@@ -204,7 +205,7 @@ router.get('/store/:id', async (req, res) => {
 		// Get extra info about a game from the Steam API
 		let externalInfo = await getSteamInfo(req.params.id);
 		externalInfo = externalInfo[req.params.id];
-		console.log(externalInfo);
+		console.log(externalInfo.success);
 		
 		res.redirect('/games/store');
 	} catch (err) {
@@ -229,9 +230,14 @@ router.post('/add', async (req, res) => {
 		
 		// Check if the game already exists
 		if (gameToAdd) {
-			// Render 'add' page and show message
-		} else {
-			// Create game and redirect to the store
+			// If it does, display the 'Add Game' page and show a message
+			res.render('add_game', {
+				gameFoundMessage: gameToAdd.title + ' already has id ' + gameToAdd.steamId + '!',
+				status: req
+			});
+			
+			// Stop route execution
+			return;
 		}
 		
 		// Create a new 'game' object
