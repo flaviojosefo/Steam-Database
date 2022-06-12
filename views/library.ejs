@@ -22,11 +22,15 @@
 						<% for (var i=0; i < ownedGames.length; i++) { %>
 							<tr height="75px">
 								<td style="padding: 0">
-									<img width="100%" src=<%= gameLogos[i] %>>
+									<a href="/games/store/<%= ownedGames[i].steamId %>">
+										<img width="100%" src=<%= gameLogos[i] %>>
+									</a>
 								</td>
 								<td>
 									<b class="muted">
-										<%= ownedGames[i].title %>
+										<a href="/games/store/<%= ownedGames[i].steamId %>" style="color: inherit">
+											<%= ownedGames[i].title %>
+										</a>
 									</b>
 									<div>
 										<i>
