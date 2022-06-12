@@ -204,6 +204,29 @@ router.get('/store/:id', async (req, res) => {
 			return;
 		}
 		
+		// Variable to check if user owns the game
+		let owned = false;
+		
+		// Check if user is logged in
+		if (req.isAuthenticated()) {
+			// Retrieve the user's library
+			const userLib = await Library.findOne({ ownderId: req.user.googleId });
+			
+			// Get games on user's library
+			const userGames = userLib.games;
+			
+			// Loop through all owned games
+			for (let i = 0; i < userGames.length; i++) {
+				// Check if user already owns a specific game
+				if (userGames[i].steamId == req.params.id) {
+					// If it does, 'owned' is true 
+					// and break out of for loop
+					owned = true;
+					break;
+				}
+			}
+		}
+		
 		// Get extra info about a game from the Steam API
 		let steamInfo = await getSteamInfo(req.params.id);
 		steamInfo = steamInfo[req.params.id];
@@ -217,6 +240,7 @@ router.get('/store/:id', async (req, res) => {
 			// Display the game's page with all the available info
 			res.render('display_game', {
 				game: gameToDisplay,
+				gameOwned: owned,
 				steamInfo: steamInfo.data,
 				status: req
 			});
@@ -224,6 +248,7 @@ router.get('/store/:id', async (req, res) => {
 			// Display the game's page with just the DB's info
 			res.render('display_game', {
 				game: gameToDisplay,
+				gameOwned: owned,
 				steamInfo: undefined,
 				status: req
 			});
@@ -289,7 +314,7 @@ router.post('/add', async (req, res) => {
 // Fetch information about a game from the Steam API
 async function getSteamInfo(appId) {
 	// Get the game's url on the API by steamId (appId)
-	const steamAppUrl = 'https://store.steampowered.com/api/appdetails?appids=' + appId;
+	const steamAppUrl = 'https://store.steampowered.com/api/appdetails?appids=' + appId + '&language=en';
 	
 	// Fetch a url's response
 	const response = await fetch(steamAppUrl);

@@ -65,6 +65,13 @@
 							</tr>
 						</tbody>
 					</table>
+					<% if (gameOwned) { %>
+						<i style="color: lightgreen">Game already owned!</i>
+					<% } else { %>
+						<button style="height: 40px" type="button" class="btn btn-primary btn-sm" onclick="location.href='/games/library/?steamId=<%= game.steamId %>';">
+							<a style="font-size: 16px"><i class="fa fa-cart-plus" aria-hidden="true"></i> Add to Library</a>
+						</button>
+					<% } %>
 				</div>
 				<div class="col-fluid"  style="padding-right: 15px">
 					<style>
