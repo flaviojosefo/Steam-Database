@@ -3,14 +3,119 @@
 		<div class="jumbotron jumbo-override">
 			<p class="lead">
 				<i class="fa fa-gamepad" aria-hidden="true"></i> <%= game.title %>
+				<a style="color: grey; font-size: 16px"><b>[<%= game.steamId %>]</b></a>
 			</p>
 			<hr class="my-4">
-			<div class="row-fluid">
-				<% if (steamInfo) { %>
-					<%= steamInfo.short_description %>
-				<% } else { %>
-					<i>No description found!</i>
-				<% } %>
+			<div class="row">
+				<style>
+					.table-hover tbody tr:hover td {
+						background-color: #4e5357;
+					}
+				</style>
+				<div class="col" style="border-radius: .3rem">
+					<table class="table table-bordered table-hover">
+						<tbody>
+							<tr>
+								<td width="150px">Game ID</td>
+								<td><%= game.steamId %></td>
+							</tr>
+							<tr>
+								<td width="150px">Developer</td>
+								<td><%= game.developer %></td>
+							</tr>
+							<tr>
+								<td width="150px">Platforms</td>
+								<td>
+									<% if (steamInfo) { %>
+										<% if (steamInfo.platforms.windows) { %>
+											<i class="fa fa-windows" aria-hidden="true"></i>
+										<% } %>
+										<% if (steamInfo.platforms.mac) { %>
+											<i class="fa fa-apple" aria-hidden="true"></i>
+										<% } %>
+										<% if (steamInfo.platforms.linux) { %>
+											<i class="fa fa-linux" aria-hidden="true"></i>
+										<% } %>
+									<% } else { %>
+										<i>No info</i>
+									<% } %>
+								</td>
+							</tr>
+							<tr>
+								<td width="150px">Release Date</td>
+								<td>
+									<% if (steamInfo) { %>
+										<%= steamInfo.release_date.date %>
+									<% } else { %>
+										<i>No info</i>
+									<% } %>
+								</td>
+							</tr>
+							<tr>
+								<td width="150px">Added By</td>
+								<td>
+									<%= game.addedBy %>
+								</td>
+							</tr>
+							<tr>
+								<td width="150px">Added On</td>
+								<td>
+									<%= game.addedAt %>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-fluid"  style="padding-right: 15px">
+					<style>
+						.header {
+							display: block;
+							width: 460px;
+							height: 215px;
+							background: #121212 center center no-repeat;
+							border-top-left-radius: .3rem;
+							border-top-right-radius: .3rem;
+						}
+						.game_description_snippet {
+							max-height: 111px;
+							width: 460px;
+							overflow: hidden;
+							font-size: 15px;
+							margin-left: 8px;
+							padding-top: 3px;
+							padding-bottom: 3px;
+							padding-left: 5px;
+							padding-right: 5px;
+							border-bottom-left-radius: .3rem;
+							border-bottom-right-radius: .3rem;
+						}
+						.clearfix::after {
+							content: "";
+							clear: both;
+							display: table;
+						}
+					</style>
+					<div class="clearfix">
+						<div class="float-right">
+							<img class="header" src=
+								<% if (steamInfo) { %>
+									<%= steamInfo.header_image %>
+								<% } else { %>
+									<%= '/images/applogo.svg' %>
+								<% } %>
+							>
+						</div>
+					</div>
+					<div class="clearfix">
+						<div class="game_description_snippet border border-top-0 float-right">
+							<% if (steamInfo) { %>
+								<%= steamInfo.short_description %>
+							<% } else { %>
+								<i>No description found!</i>
+							<% } %>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</main>

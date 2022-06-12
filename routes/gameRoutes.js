@@ -187,23 +187,22 @@ router.post('/library', async (req, res) => {
 	}
 });
 
-router.get('/library/:id', (req, res) => {
-	
-	try {
-		
-	} catch (err) {
-		
-	}
-	
-	//const externalInfo = await getSteamInfo('1085660');
-	//console.log(externalInfo.success);
-});
-
 router.get('/store/:id', async (req, res) => {
 	// Encapsulate code in try/catch to prevent await related errors
 	try {
 		// Get game info from MongoDB
 		const gameToDisplay = await Game.findOne({ steamId: req.params.id });
+		
+		// Check if steamId on the URL exists
+		if (!gameToDisplay) {
+			// If not, render an 'error'
+			res.render('error', {
+				message_tag: 'Game not found!',
+				status: req
+			});
+			// And stop the route
+			return;
+		}
 		
 		// Get extra info about a game from the Steam API
 		let steamInfo = await getSteamInfo(req.params.id);
@@ -212,7 +211,7 @@ router.get('/store/:id', async (req, res) => {
 		// Check if game exists on the API
 		if (steamInfo.success) {
 			// Reduce the info on the JSON to only the values we want
-			const interestKeys = ['short_description', 'header_image', 'metacritic', 'release_date' ];
+			const interestKeys = ['short_description', 'header_image', 'platforms', 'release_date' ];
 			Object.keys(steamInfo.data).forEach((key) => interestKeys.includes(key) || delete steamInfo.data[key]);
 			
 			// Display the game's page with all the available info
@@ -238,9 +237,6 @@ router.get('/store/:id', async (req, res) => {
 			status: req
 		});
 	}
-	
-	// Display game info
-	//console.log(externalInfo.success);
 });
 
 router.post('/add', async (req, res) => {
