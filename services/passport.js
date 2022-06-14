@@ -76,7 +76,7 @@ passport.use(
 				}
 				// Print the user on the console
 				console.log(logMessage, thisUser);
-				done(null, thisUser);
+				return done(null, thisUser);
 			} catch (err) {
 				// Print error and exit app
 				console.error(err);
