@@ -16,15 +16,19 @@
 					<table class="table table-bordered table-hover">
 						<tbody>
 							<tr>
-								<td width="150px">Game ID</td>
+								<td width="150px">
+									<b>Game ID</b>
+								</td>
 								<td><%= game.steamId %></td>
 							</tr>
 							<tr>
-								<td width="150px">Developer</td>
+								<td width="150px"><b>Developer</b></td>
 								<td><%= game.developer %></td>
 							</tr>
 							<tr>
-								<td width="150px">Platforms</td>
+								<td width="150px">
+									<b>Platforms</b>
+								</td>
 								<td>
 									<% if (steamInfo) { %>
 										<% if (steamInfo.platforms.windows) { %>
@@ -42,7 +46,9 @@
 								</td>
 							</tr>
 							<tr>
-								<td width="150px">Release Date</td>
+								<td width="150px">
+									<b>Release Date</b>
+								</td>
 								<td>
 									<% if (steamInfo) { %>
 										<%= steamInfo.release_date.date %>
@@ -52,13 +58,17 @@
 								</td>
 							</tr>
 							<tr>
-								<td width="150px">Added By</td>
+								<td width="150px">
+									<b>Added By</b>
+								</td>
 								<td>
 									<%= game.addedBy %>
 								</td>
 							</tr>
 							<tr>
-								<td width="150px">Added On</td>
+								<td width="150px">
+									<b>Added On</b>
+								</td>
 								<td>
 									<%= game.addedAt %>
 								</td>
@@ -84,7 +94,6 @@
 							border-top-right-radius: .3rem;
 						}
 						.game_description_snippet {
-							max-height: 111px;
 							width: 460px;
 							overflow: hidden;
 							font-size: 15px;
