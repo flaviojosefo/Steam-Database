@@ -21,7 +21,7 @@
 						<button id="genreButton" type="button" onclick="addGenre()" class="btn btn-success btn-sm" style="height: 30px; margin-bottom: 5px">
 							<i class="fa fa-plus-square" aria-hidden="true"></i> Add Genre
 						</button>
-						<button type="button" onclick="resetGenres()" class="btn btn-danger btn-sm" style="height: 30px; margin-bottom: 5px">
+						<button id="resetGenresButton" type="button" onclick="resetGenres()" class="btn btn-danger btn-sm" style="height: 30px; margin-bottom: 5px; display: none">
 							<i class="fa fa-undo" aria-hidden="true"></i> Genres
 						</button>
 					</p>
@@ -52,6 +52,11 @@
 			// Hide 'Add Genre' button if maxOptions is reached
 			if (currentOptions == maxOptions - 1) {
 				$('#genreButton').hide();
+			}
+			
+			// Show the 'Reset Genres' button if we have more than one select
+			if (currentOptions > 0) {
+				$('#resetGenresButton').show();
 			}
 		
 			//Create and append select list
@@ -91,6 +96,9 @@
 			
 			// Display 'Add Genre' button
 			$('#genreButton').show();
+			
+			// Hide the 'Reset Genres' button
+			$('#resetGenresButton').hide();
 		}
 		
 		// Validate all form fields
