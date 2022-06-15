@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const fetch = require('node-fetch');
-const url = require('url');
 const { isAuth } = require('../services/middleware');
 const Game = require('../models/Game');
 const Library = require('../models/Library');
@@ -65,8 +64,6 @@ router.get('/store', async (req, res) => {
 			status: req
 		});
 	}
-	
-	
 });
 
 // Render the library page
@@ -74,17 +71,7 @@ router.get('/library', isAuth, async (req, res) => {
 	// Encapsulate code in try/catch to prevent await related errors
 	try {
 		// Fetch a library based on user's googleId
-		let userLib = await Library.findOne({ ownderId: req.user.googleId });
-		
-		// Check if user does NOT have a library
-		if (!userLib) {
-			// If not, create a new (empty) one
-			userLib = await new Library({
-				ownderId: req.user.googleId,
-				games: undefined
-			}).save();
-			console.log('Created library for user ' + req.user.name, userLib);	
-		}
+		const userLib = await fetchUserLibrary(req.user.googleId);
 	
 		// Check if we get data on a query
 		if (req.query.steamId) {
@@ -106,7 +93,7 @@ router.get('/library', isAuth, async (req, res) => {
 			}
 			
 			// Redirect the user to the normal library URL
-			res.redirect(url.parse(req.originalUrl).pathname);
+			res.redirect('/games/library');
 			
 			// Stop route execution
 			return;
@@ -187,6 +174,7 @@ router.post('/library', async (req, res) => {
 	}
 });
 
+// Display a specific game's page
 router.get('/store/:id', async (req, res) => {
 	// Encapsulate code in try/catch to prevent await related errors
 	try {
@@ -264,6 +252,7 @@ router.get('/store/:id', async (req, res) => {
 	}
 });
 
+// Try to add a game to the database
 router.post('/add', async (req, res) => {
 	// Encapsulate code in try/catch to prevent await related errors
 	try {
@@ -283,7 +272,8 @@ router.post('/add', async (req, res) => {
 		}
 		
 		// Create a new 'game' object
-		const newGame = new Game({
+		// and attempt to save the game on the DB
+		const newGame = await new Game({
 			title: req.body.title,
 			steamId: req.body.steamId,
 			genres: req.body.genres,
@@ -291,10 +281,8 @@ router.post('/add', async (req, res) => {
 			addedBy: getCurrentUser(req)[0],
 			addedById: getCurrentUser(req)[1],
 			addedAt: getDate().format(new Date())
-		});
+		}).save();
 		
-		// Attempt to save the game on the DB
-		const thisGame = await newGame.save();
 		console.log('Added game:', newGame);
 		
 		// Redirect to the 'store' page
@@ -346,6 +334,25 @@ async function fetchLogo(appId) {
 		// If url is not found, return a default logo in the server's files
 		return '/images/applogo.svg';
 	}
+}
+
+// Fetch or create a user's library
+async function fetchUserLibrary(googleId) {
+	// Fetch a library based on user's googleId
+	let userLib = await Library.findOne({ ownderId: googleId });
+	
+	// Check if user does NOT have a library
+	if (!userLib) {
+		// If not, create a new (empty) one
+		userLib = await new Library({
+			ownderId: googleId,
+			games: undefined
+		}).save();
+		console.log('Created library for user ' + req.user.name, userLib);	
+	}
+	
+	// Return the user's library
+	return userLib;
 }
 
 // Get the user's name and Id
