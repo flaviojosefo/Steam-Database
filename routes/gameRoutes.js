@@ -71,7 +71,7 @@ router.get('/library', isAuth, async (req, res) => {
 	// Encapsulate code in try/catch to prevent await related errors
 	try {
 		// Fetch a library based on user's googleId
-		const userLib = await fetchUserLibrary(req.user.googleId);
+		const userLib = await fetchUserLibrary(req.user);
 	
 		// Check if we get data on a query
 		if (req.query.steamId) {
@@ -337,18 +337,18 @@ async function fetchLogo(appId) {
 }
 
 // Fetch or create a user's library
-async function fetchUserLibrary(googleId) {
+async function fetchUserLibrary(user) {
 	// Fetch a library based on user's googleId
-	let userLib = await Library.findOne({ ownderId: googleId });
+	let userLib = await Library.findOne({ ownderId: user.googleId });
 	
 	// Check if user does NOT have a library
 	if (!userLib) {
 		// If not, create a new (empty) one
 		userLib = await new Library({
-			ownderId: googleId,
+			ownderId: user.googleId,
 			games: undefined
 		}).save();
-		console.log('Created library for user ' + req.user.name, userLib);	
+		console.log('Created library for user ' + user.name, userLib);	
 	}
 	
 	// Return the user's library
