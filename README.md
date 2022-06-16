@@ -15,7 +15,7 @@ Extra information about games is acquired through JSON files provided by
 
 ## Discussion
 
-#### Base Code
+### Base Code
 
 The project was initiated through the use of
 [auth-google-passport](https://github.com/jrogado/auth-google-passport)'s code
@@ -38,7 +38,7 @@ types of files allow `html` generation through the use of embedded *JavaScript*,
 meaning we can pass code directly to `html` and build upon it with the help of
 specific tags such as `<%>`. We can also display variable values with the `<%=>` tag.
 
-#### Project Files
+### Project Files
 
 Through the project's creation, a couple of files were of utmost importance, namely:
 `gameRoutes.js`, all `.js` files present on the `models` directory and all `.ejs`
@@ -89,7 +89,7 @@ possesses none, a message about that fact is displayed instead). Users can also
 The `gameRoutes.js` file is the most important file in the whole project,
 essentially controlling the flow (routing) of the program's main responsibilities.
 
-In here, `express`'s' `Router()` is put to work, by essentially building upon two
+In here, express' `Router()` is put to work, by essentially building upon two
 important functions for each `route`: `GET` and `POST`.\
 Let's analyze the `GET` one's first:
 
@@ -143,13 +143,15 @@ Now that we know what's behind the program, we can sum functionality into 4 poin
 This project was a challenging one. I had already worked with these types of
 technologies, just not on a level where I understood too much of what I was doing.
 However, now, a year later, I can confidently say that I have a complete grasp on
-everything that was built.\
+everything that was built.
+
 By taking some freedom with the objective of the project and selecting something
 that was a little bit of an extra compared to what was required, I was able to
 learn a lot, not only about semantics or JS structure, but also about how to
 effectively build an application with which users can interact in a direct manner
 (through Google's API) and save important interaction results in a database (user
-info, games, etc. on MongoDB).\
+info, games, etc. on MongoDB).
+
 This project helped me realize that building client-server applications is not
 as hard as it seems. There are a lot of APIs and libraries which aid us in a
 multitude of functions that we require to get projects going, by hiding a lot
